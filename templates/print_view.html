@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>View Inventory</title>
+        <!-- <link href="stylesheet.css" rel="stylesheet"> -->
+        <style type="text/css">
+            body{
+                font-family: Verdana;
+            }
+            #title{
+                padding-bottom: 0px;
+                margin-bottom: 0px;
+            }
+            table{
+                width: 400px;
+                border-collapse:collapse;
+                text-align: center;
+            }
+            th, td{
+                padding: 2px 5px 0px 5px;
+                border: 1px solid gray;
+
+            }
+            /*1E5562;*/
+            .boxes{
+                margin-left: 130px;
+                text-align: center;
+                width: 400px;
+                padding: 10px;
+            }
+            #total{
+                /*text-align: center;*/
+                font-size: 20px;
+            }
+            #tag{
+                font-size: 20px;
+            }
+            .header{
+                background-color: gray;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1 id='title' class='boxes'>Current Inventory</h1>
+        <div class='boxes'>
+            <div id='tag'>Inventory Tag Total</div>
+            <div id='total'>{{total}}</div>
+        </div>
+        <div class='boxes'>
+            <table>
+                <thead>
+                    <!-- <th colspan='4' style="font-size:30px;">Current Inventory</th> -->
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class='header'><strong>Bar Code</strong></td>
+                        <td class='header' style="width:40px"><strong>#</strong></td>
+                        <td class='header'><strong>Item Value</strong></td>
+                        <td class='header'><strong>Total Value</strong></td>
+
+                    {% for row in inventory_list %}
+                    <tr>
+                        <td>{{row[0]}}</td>
+                        <td>{{row[1]}}</td>
+                        <td>{{row[2]}}</td>
+                        <td>{{row[3]}}</td>
+                    <tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </body>
+</html>

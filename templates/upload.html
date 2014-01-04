@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Upload Inventory</title>
+        <style type="text/css">
+            body{
+                margin: 0px;
+                font-family: Verdana;
+                background-color: silver;
+            }
+            #nav_bar{
+                height: 55px;
+                background-color: black;
+                width: auto;
+                
+            }
+            .buttons{
+                color: silver;
+                float: left;
+                padding: 3px;
+                padding-right: 20px;
+                margin: 15px 0px 15px 5px;
+            }
+            a{
+                color: silver;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="nav_bar">
+            <div class="buttons"><a href="/">Silvique</a></div>
+            <div class="buttons"><a href="/show">View Inventory</a></div>
+            <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
+            <div class="buttons"><a href="/compare">Compare Inventory</a></div>
+            <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
+        </div>
+        <form class="upload_form"  action="{{url_for("upload_inventory")}}" method='POST'>
+            <input type="text" class="form" placeholder="Inventory File" name="file">
+            <input type="submit" class="submit" value="Submit">
+        </form>
+    </body>
+</html>

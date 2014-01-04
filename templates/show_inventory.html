@@ -1,0 +1,113 @@
+<html>
+    <head>
+        <title>View Inventory</title>
+        <link type="text/css" href="stylesheet.css" rel="stylesheet">
+        <style type="text/css">
+            body{
+                margin: 0px;
+                background-color: silver;
+                font-family: Verdana;
+            }
+            #title{
+                padding-bottom: 0px;
+                margin-bottom: 0px;
+            }
+            table{
+                width: 400px;
+                border-collapse:collapse;
+                text-align: center;
+            }
+            th, td{
+                padding: 2px 5px 0px 5px;
+                border: 1px solid gray;
+
+            }
+            .boxes{
+                margin-left: 130px;
+                text-align: center;
+                width: 400px;
+                padding: 10px;
+            }
+            #total{
+                /*text-align: center;*/
+                font-size: 20px;
+            }
+            #tag{
+                font-size: 20px;
+            }
+            .header{
+                background-color: gray;
+            }
+            #nav_bar{
+                height: 55px;
+                background-color: black;
+                width: auto;
+                
+            }
+            .buttons{
+                color: silver;
+                float: left;
+                padding: 3px;
+                padding-right: 20px;
+                margin: 15px 0px 15px 5px;
+            }
+            a{
+                color: silver;
+                text-decoration: none;
+            }
+            #print{
+                float: right;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="nav_bar">
+            <div class="buttons"><a href="/">Silvique</div>
+            <div class="buttons"><a href="/show">View Inventory</a></div>
+            <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
+            <div class="buttons"><a href="/compare">Compare Inventory</a></div>
+            <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
+            <div id="print" class="buttons"><a href="/print_view">Print View</a></div>
+        </div>
+        <div id="main_body">
+            <div id="left_box">
+                <div id="side_bar">
+                    <div>Filter By</div>
+                </div>
+            </div>
+            <div id="right_box">
+                <h1 id='title' class='boxes'>Current Inventory</h1>
+                <div class='boxes'>
+                    <div id='tag'>Inventory Tag Total</div>
+                    <div id='total'>${{total}}</div>
+                </div>
+                <div class='boxes'>
+                    <table>
+                        <thead>
+                            <!-- <th colspan='4' style="font-size:30px;">Current Inventory</th> -->
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class='header'><strong>Bar Code</strong></td>
+                                <td class='header' style="width:40px"><strong>#</strong></td>
+                                <td class='header'><strong>Item Value</strong></td>
+                                <td class='header'><strong>Total Value</strong></td>
+
+                            {% for row in inventory_list %}
+                            <tr>
+                                <td>{{row[0]}}</td>
+                                <td>{{row[1]}}</td>
+                                <td>${{row[2]}}</td>
+                                <td>${{row[3]}}</td>
+                            <tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
+    </body>
+</html>
