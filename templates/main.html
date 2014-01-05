@@ -1,16 +1,19 @@
 <html>
     <head>
+        <!-- <link type="text/css" rel="stylesheet" href="../css/stylesheet.css" /> -->
         <title>Silvique</title>
         <style type="text/css">
             body{
                 margin: 0px;
-                font-family: Verdana;
-                background-color: silver;
+                background-image: url('http://www.silvique.comxa.com/web_images/silvique_promo_better_photos__no_name.jpg');
+                background-color: black;
             }
             #nav_bar{
+                font-family: Verdana;
                 height: 55px;
                 background-color: black;
                 width: auto;
+                /*border-bottom: 1px solid silver;*/
                 
             }
             .buttons{
@@ -24,29 +27,55 @@
                 color: silver;
                 text-decoration: none;
             }
+            #background{
+                position: absolute;
+                /*background-color: rgba(0, 0, 0, .5);*/
+                height: 100%;
+                width: 100%;
+            }
+            #center_bar{
+                width: 90%;
+                background-color: black;
+                margin: auto;
+                margin-top: 150px;
+                padding: 50px;
+            }
             #main_title{
-                margin-top: 250px;
-                font-size: 50px; 
+                font-family: cursive;
+                font-size: 100px; 
+
             }
             .center{
                 width: auto;
                 text-align: center;
+                color: silver;
             }
             #name{
-                font-size: 30px;
+                font-size: 40px;
+                color: 197739;
+            }
+            #silvique{
+                font-family: cursive;
+                font-size: 32px;
+                margin: 0px 20px 0px 45px;
+                color: 7D1A5C;
             }
 
         </style>
     </head>
     <body>
         <div id="nav_bar">
-            <div class="buttons">Silvique</div>
+            <div id="silvique" class="buttons">Silvique</div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
             <div class="buttons"><a href="/compare">Compare Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
         </div>
-        <div class="center" id="main_title">Silvique Sterling Silver</div>
-        <div class="center" id="name">Lynn Dulmage</div>
+        <div id="background">
+            <div id="center_bar">
+                <div class="center" id="main_title">Silvique Sterling Silver</div>
+                <div class="center" id="name">Lynn Dulmage</div>
+            </div>
+        </div>
     </body>
 </html>

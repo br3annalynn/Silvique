@@ -1,9 +1,10 @@
 from xlrd import open_workbook, cellname
 import model
 from flask import Flask, render_template, request, redirect, session, url_for, flash
+import datetime
 
 app = Flask(__name__)
-
+app.secret_key = "shhhhthisisasecret"
 
 @app.route("/")
 def index():
@@ -29,11 +30,17 @@ def upload_inv():
 @app.route("/upload_inv", methods=["POST"])
 def upload_inventory():
     file_name = request.form.get('file')
-    print "********************opening ", file_name
-    book = open_workbook(file_name)
-    sheet = book.sheet_by_index(0)
-    read_bar_codes(sheet)
-    return redirect(url_for('display_inventory'))
+    print "******************Trying to open ", file_name
+    try:
+        book = open_workbook(file_name)
+        sheet = book.sheet_by_index(0)
+        read_bar_codes(sheet)
+        return redirect(url_for('display_inventory'))
+    except IOError:
+        flash("File not found. Check file name. ")
+        print "No file found with the name ", file_name
+        return redirect(url_for('upload_inventory'))
+    
 
 def read_bar_codes(sheet):
     # for row_index in range(sheet.nrows):
@@ -50,11 +57,12 @@ def convert_to_int(a, b, c):
 
 @app.route("/print_view")
 def print_view():
+    current_date = datetime.date.today().strftime("%d/%m/%y")
     inventory_list = model.show_inventory()
     total = 0
     for row in inventory_list:
         total += row[3]
-    return render_template('print_view.html', inventory_list=inventory_list, total=total)
+    return render_template('print_view.html', inventory_list=inventory_list, total=total, current_date=current_date)
 
     
 if __name__ == "__main__":

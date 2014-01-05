@@ -17,7 +17,7 @@
             }
             th, td{
                 padding: 2px 5px 0px 5px;
-                border: 1px solid gray;
+                border: 1px solid white;
 
             }
             /*1E5562;*/
@@ -37,14 +37,20 @@
             .header{
                 background-color: gray;
             }
+            .first{
+                background-color: silver;
+            }
+            .second{
+                background-color: white;
+            }
 
         </style>
     </head>
     <body>
-        <h1 id='title' class='boxes'>Current Inventory</h1>
+        <h1 id='title' class='boxes'>Current Inventory {{current_date}}</h1>
         <div class='boxes'>
             <div id='tag'>Inventory Tag Total</div>
-            <div id='total'>{{total}}</div>
+            <div id='total'>${{total}}</div>
         </div>
         <div class='boxes'>
             <table>
@@ -59,12 +65,21 @@
                         <td class='header'><strong>Total Value</strong></td>
 
                     {% for row in inventory_list %}
-                    <tr>
-                        <td>{{row[0]}}</td>
-                        <td>{{row[1]}}</td>
-                        <td>{{row[2]}}</td>
-                        <td>{{row[3]}}</td>
-                    <tr>
+                        {% if loop.index %2 == 0 %}
+                            <tr class="first">
+                                <td>{{row[0]}}</td>
+                                <td>{{row[1]}}</td>
+                                <td>${{row[2]}}</td>
+                                <td>${{row[3]}}</td>
+                            <tr>
+                        {% else %}
+                            <tr class="second">
+                                <td>{{row[0]}}</td>
+                                <td>{{row[1]}}</td>
+                                <td>${{row[2]}}</td>
+                                <td>${{row[3]}}</td>
+                            <tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
