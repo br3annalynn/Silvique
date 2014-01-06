@@ -106,7 +106,7 @@
             <div class="buttons" id="silvique"><a id="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
-            <div class="buttons"><a href="/compare">Compare Inventory</a></div>
+            <div class="buttons"><a href="/upload_compare">Compare Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
             <div id="print" class="buttons"><a href="/print_view">Print View</a></div>
         </div>
@@ -134,24 +134,25 @@
                                 <td class='header' style="width:40px"><strong>#</strong></td>
                                 <td class='header'><strong>Item Value</strong></td>
                                 <td class='header'><strong>Total Value</strong></td>
-
-                            {% for row in inventory_list %}
-                                {% if loop.index %2 == 0 %}
-                                    <tr class="first">
-                                        <td>{{row[0]}}</td>
-                                        <td>{{row[1]}}</td>
-                                        <td>${{row[2]}}</td>
-                                        <td>${{row[3]}}</td>
-                                    <tr>
-                                {% else %}
-                                    <tr class="second">
-                                        <td>{{row[0]}}</td>
-                                        <td>{{row[1]}}</td>
-                                        <td>${{row[2]}}</td>
-                                        <td>${{row[3]}}</td>
-                                    <tr>
-                                {% endif %}
-                            {% endfor %}
+                            {if inventory_list}
+                                {% for row in inventory_list %}
+                                    {% if loop.index %2 == 0 %}
+                                        <tr class="first">
+                                            <td>{{row[0]}}</td>
+                                            <td>{{row[1]}}</td>
+                                            <td>${{row[2]}}</td>
+                                            <td>${{row[3]}}</td>
+                                        <tr>
+                                    {% else %}
+                                        <tr class="second">
+                                            <td>{{row[0]}}</td>
+                                            <td>{{row[1]}}</td>
+                                            <td>${{row[2]}}</td>
+                                            <td>${{row[3]}}</td>
+                                        <tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {endif}
                         </tbody>
                     </table>
                 </div>

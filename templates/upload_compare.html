@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Upload Inventory</title>
+        <title>Upload Comparison File</title>
         <style type="text/css">
             body{
                 margin: 0px;
@@ -85,9 +85,9 @@
         {% for message in get_flashed_messages() %}
             <p id="message">{{message}}</p>
         {% endfor %}
-        <form id="upload_form"  action="{{url_for("upload_inventory")}}" method='POST'>
-            <div id='upload_title'>Upload an Inventory File Here</div>
-            <input type="text" id="form" placeholder="Inventory File Name" name="file"><br>
+        <form id="upload_form"  action="{{url_for("upload_comparison")}}" method='POST'>
+            <div id='upload_title'>Upload a Comparison File Here</div>
+            <input type="text" id="form" placeholder="Comparison File Name" name="file"><br>
             <input type="submit" id="submit" value="Submit">
         </form>
     </body>
