@@ -56,11 +56,22 @@ def convert_to_int(a, b, c):
     number += (ord(a) - 48) * 100 + (ord(b) - 48) * 10 + (ord(c) - 48)
     return number
 
-@app.route("/upload_compare")
-def upload_compare():
-    return render_template('upload_compare.html')
+@app.route("/print_view")
+def print_view():
+    current_date = datetime.date.today().strftime("%d/%m/%y")
+    inventory_list = model.show_inventory()
+    total = 0
+    for row in inventory_list:
+        total += row[3]
+    return render_template('print_view.html', inventory_list=inventory_list, total=total, current_date=current_date)
 
-@app.route("/upload_compare", methods=["POST"])
+@app.route("/delete_inv")
+def delete_inventory():
+    model.clear("I")
+    return redirect(url_for('display_inventory'))
+
+
+@app.route("/display_compare", methods=["POST"])
 def upload_comparison():
     global XLS_FOLDER
     file_name = request.form.get('file')
@@ -75,26 +86,18 @@ def upload_comparison():
     except IOError:
         flash("File not found. Check file name. ")
         print "No file found with the name ", file_name
-        return redirect(url_for('upload_compare'))
+        return redirect(url_for('upload_comparison'))
 
 @app.route("/display_compare")
 def display_comparison():
     (rows, inventory_only_items, comparison_only_items, unequal_items) = model.show_comparison()
     return render_template('display_compare.html', rows=rows, inventory_only_items=inventory_only_items, comparison_only_items=comparison_only_items, unequal_items=unequal_items)
 
-@app.route("/print_view")
-def print_view():
+@app.route("/print_view_compare")
+def print_view_compare():
     current_date = datetime.date.today().strftime("%d/%m/%y")
-    inventory_list = model.show_inventory()
-    total = 0
-    for row in inventory_list:
-        total += row[3]
-    return render_template('print_view.html', inventory_list=inventory_list, total=total, current_date=current_date)
-
-@app.route("/delete_inv")
-def delete_inventory():
-    model.clear("I")
-    return redirect(url_for('display_inventory'))
+    (rows, inventory_only_items, comparison_only_items, unequal_items) = model.show_comparison()
+    return render_template('print_view_compare.html', rows=rows, inventory_only_items=inventory_only_items, comparison_only_items=comparison_only_items, unequal_items=unequal_items, current_date=current_date)
 
 @app.route("/delete_compare")
 def delete_comparison():
