@@ -47,9 +47,12 @@ def upload_inventory():
 def read_bar_codes(file_type, sheet):
     for row_index in range(sheet.nrows):
         bar_code = sheet.cell(row_index,0).value
-        # change last three elements of string to integer
-        value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
-        model.check_inventory(file_type, bar_code, value)
+        if bar_code:
+            # change last three elements of string to integer
+            value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
+            model.check_inventory(file_type, bar_code, value)
+        else:
+            continue
 
 def convert_to_int(a, b, c):
     number = 0

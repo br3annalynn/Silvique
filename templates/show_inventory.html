@@ -32,6 +32,14 @@
                 text-align: center;
                 width: 100%;
                 padding: 10px;
+                
+            }
+            #table_div{
+                height: 500px;
+                overflow-y: auto;
+                /*overflow: scroll;*/
+                margin-top: 0px;
+                padding-top: 0px;
             }
             #total{
                 font-size: 20px;
@@ -112,29 +120,22 @@
             <div id="print" class="buttons"><a href="/print_view">Print View</a></div>
         </div>
         <div id="main_body">
-            <!-- <div class="main_boxes" id="left_box">
-                <div id="side_bar">
-                    <div>Filter By</div>
-                </div>
-                 
-            </div> -->
             <div class="main_boxes" id="right_box">
                 <h1 id='title' class='boxes'>Current Inventory</h1>
                 <div class='boxes'>
                     <div class='total' id='tag'>Inventory Tag Total</div>
                     <div class='total' id='total'>${{total}}</div>
                 </div>
-                <div class='boxes'>
+                <div id="table_div" class='boxes'>
                     <table>
                         <thead>
-                            <!-- <th colspan='4' style="font-size:30px;">Current Inventory</th> -->
+                            <th class='header'><strong>Sku</strong></th>
+                            <th class='header' style="width:40px"><strong>#</strong></th>
+                            <th class='header'><strong>Item Value</strong></th>
+                            <th class='header'><strong>Total Value</strong></th>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class='header'><strong>Bar Code</strong></td>
-                                <td class='header' style="width:40px"><strong>#</strong></td>
-                                <td class='header'><strong>Item Value</strong></td>
-                                <td class='header'><strong>Total Value</strong></td>
                             {if inventory_list}
                                 {% for row in inventory_list %}
                                     {% if loop.index %2 == 0 %}
