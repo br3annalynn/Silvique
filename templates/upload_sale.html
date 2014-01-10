@@ -1,98 +1,23 @@
 <html>
     <head>
         <title>Upload Sale</title>
-        <style type="text/css">
-            body{
-                margin: 0px;
-                font-family: Verdana;
-                background-color: silver;
-            }
-            #nav_bar{
-                height: 55px;
-                background-color: black;
-                width: auto;
-                
-            }
-            .buttons{
-                color: silver;
-                float: left;
-                padding: 3px;
-                padding-right: 20px;
-                margin: 15px 0px 15px 5px;
-            }
-            a{
-                color: silver;
-                text-decoration: none;
-            }
-            a:hover{
-                color: 197739;
-            }
-            #upload_form{
-                background-color: 197739;
-                width: 50%;
-                margin: auto;
-                margin-top: 100px;
-                height: 500px;
-                border-radius:25px;
-            }
-            #form{
-                padding: 15px;
-                margin: 100px 120px 0px 180px;
-                font-size: 20px;
-                text-align: center;
-                width: 50%;
-                height: 30px;
-            }
-            #submit{
-                margin: 5px 120px 50px 180px;
-                font-size: 15px;
-                text-align: center;
-                width: 50%;
-                height: 30px;
-                background-color: black;
-                color: silver;
-            }
-            #upload_title{
-                color: black;
-                font-size: 40px;
-                text-align: center;
-                width: 100%;
-                padding-top: 100px;
-            }
-            #silvique{
-                font-family: cursive;
-                font-size: 32px;
-                margin: 0px 20px 0px 45px;
-            }
-            #silvique_inside{
-                color: 7D1A5C;
-            }
-            #side_bar{
-                padding: 30px;
-                font-size: 25px;
-            }
-            #message{
-                position: absolute;
-                margin-left: 600px;
-                margin-top: 50px;
-            }
-        </style>
+        <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
-    <body>
-        <div id="nav_bar">
-            <div class="buttons" id="silvique"><a id="silvique_inside"href="/">Silvique</a></div>
+    <body class="background_upload">
+        <div class="nav_bar">
+            <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
         </div>
         {% for message in get_flashed_messages() %}
-            <p id="message">{{message}}</p>
+            <p class="message">{{message}}</p>
         {% endfor %}
-        <form id="upload_form"  action="{{url_for("upload_sale")}}" method='POST'>
-            <div id='upload_title'>Upload a Sale Here</div>
-            <input type="text" id="form" placeholder="Sale File Name" name="file"><br>
-            <input type="submit" id="submit" value="Submit">
+        <form id="sale" class="upload_form"  action="{{url_for("upload_sale")}}" method='POST'>
+            <div id="sale" class='upload_title'>Upload a Sale Here</div>
+            <input type="text" class="form" placeholder="Sale File Name" name="file"><br>
+            <input type="submit" class="sale submit" value="Submit">
         </form>
     </body>
 </html>

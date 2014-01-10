@@ -1,137 +1,18 @@
 <html>
     <head>
         <title>View Inventory</title>
-        <!-- <link type="text/css" href="../css/stylesheet.css" rel="stylesheet"> -->
-        <style type="text/css">
-            body{
-                margin: 0px;
-                background-color: black;
-                font-family: Verdana;
-            }
-            #title{
-                color: 7D1A5C;
-                padding-bottom: 0px;
-                margin-bottom: 0px;
-                margin-top: 10px;
-                background-color: black;
-            }
-            table{
-                width: 600px;
-                border-collapse:collapse;
-                text-align: center;
-                margin: auto;
-            }
-            th, td{
-                padding: 10px 10px 10px 10px;
-                border: 1px solid E3D8D8;
-
-            }
-            .boxes{
-                margin: auto;
-                text-align: center;
-                width: 100%;
-                padding: 10px;
-                
-            }
-            #table_div{
-                height: 500px;
-                overflow-y: auto;
-                margin-top: 0px;
-                padding-top: 0px;
-                margin-right: 0px;
-            }
-            #total{
-                font-size: 20px;
-            }
-            #tag{
-                font-size: 20px;
-            }
-            .header{
-                background-color: gray;
-            }
-            #nav_bar{
-                height: 55px;
-                background-color: black;
-                width: auto;
-                border-bottom: 1px solid silver;
-                
-            }
-            .buttons{
-                color: silver;
-                float: left;
-                padding: 3px;
-                padding-right: 20px;
-                margin: 15px 0px 15px 5px;
-            }
-            a{
-                color: silver;
-                text-decoration: none;
-            }
-            a:hover{
-                color: 197739;
-            }
-            #print{
-                float: right;
-            }
-            #left_box{
-                background-color: 197739;
-                position: absolute;
-                width: 200px;
-                height: 100%;
-            }
-            #right_box{
-                position: absolute;
-                width: 100%;
-                margin: auto;
-            }
-            .main_boxes{
-                float: left;
-            }
-            #silvique{
-                font-family: cursive;
-                font-size: 32px;
-                margin: 0px 20px 0px 45px;
-            }
-            #silvique_inside{
-                color: 7D1A5C;
-            }
-            #side_bar{
-                padding: 30px;
-                font-size: 25px;
-            }
-            .first{
-                background-color: silver;
-            }
-            .second{
-                background-color: white;
-            }
-            .total{
-                color: 197739;
-            }
-            #message_box{
-                position: absolute;
-                top: 183px;
-                right: 40px;
-                color: silver;
-                width: 300px;
-            }
-            #add{
-                color: 197739;
-            }
-
-
-        </style>
+        <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
-    <body>
-        <div id="nav_bar">
-            <div class="buttons" id="silvique"><a id="silvique_inside"href="/">Silvique</a></div>
+    <body class="background_show"=>
+        <div class="nav_bar_silver">
+            <div class="silvique buttons"><a class="silvique_inside" href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
-            <div id="print" class="buttons"><a href="/print_view">Print View</a></div>
+            <div class="print buttons"><a href="/print_view">Print View</a></div>
         </div>
-        <div id="message_box">
+        <div class="message_box">
             {% if get_flashed_messages() %}
                 <p> Invalid Sku's found. Write down these numbers and choose <span id="add">Add Sku's</span> to re-enter: </p>
                 {% for message in get_flashed_messages() %}
@@ -139,24 +20,26 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div id="main_body">
-            <div class="boxes" id="right_box">
-                <h1 id='title' class='boxes'>Current Inventory</h1>
+        <div class="main_body">
+            <div class="boxes" class="right_box">
+                <h1 class='title boxes'>Current Inventory</h1>
                 <div class='boxes'>
                     <div class='total' id='tag'>Inventory Tag Total   ${{total}}</div>
                     <!-- <div class='total' id='total'></div> -->
                 </div>
-                <div id="table_div" class='boxes'>
+                <div class="table_div" class='boxes'>
                     <table>
                         <thead>
-                            <th class='header'><strong>Sku</strong></th>
-                            <th class='header' style="width:40px"><strong>#</strong></th>
-                            <th class='header'><strong>Item Value</strong></th>
-                            <th class='header'><strong>Total Value</strong></th>
                         </thead>
                         <tbody>
                             <tr>
-                            {if inventory_list}
+                                <td class='header'><strong>Sku</strong></td>
+                                <td class='header' style="width:40px"><strong>#</strong></td>
+                                <td class='header'><strong>Item Value</strong></td>
+                                <td class='header'><strong>Total Value</strong></td>
+                            </tr>
+                            <tr>
+                            {% if inventory_list %}
                                 {% for row in inventory_list %}
                                     {% if loop.index %2 == 0 %}
                                         <tr class="first">
@@ -174,7 +57,7 @@
                                         <tr>
                                     {% endif %}
                                 {% endfor %}
-                            {endif}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

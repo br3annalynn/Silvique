@@ -118,7 +118,7 @@ def display_comparison():
 
 @app.route("/print_view_compare")
 def print_view_compare():
-    current_date = datetime.date.today().strftime("%d/%m/%y")
+    current_date = datetime.date.today().strftime("%m/%d/%y")
     (rows, inventory_only_items, comparison_only_items, unequal_items) = model.show_comparison()
     return render_template('print_view_compare.html', rows=rows, inventory_only_items=inventory_only_items, comparison_only_items=comparison_only_items, unequal_items=unequal_items, current_date=current_date)
 

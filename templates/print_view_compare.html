@@ -1,177 +1,120 @@
 <html>
     <head>
         <title>Comparison</title>
-        <!-- <link href="stylesheet.css" rel="stylesheet"> -->
-        <style type="text/css">
-            body{
-                font-family: Verdana;
-            }
-            #title{
-                padding-bottom: 0px;
-                margin-bottom: 0px;
-            }
-            table{
-                width: 500px;
-                border-collapse:collapse;
-                text-align: center;
-                margin-bottom: 30px;
-            }
-            th, td{
-                padding: 2px 5px 0px 5px;
-                border: 1px solid white;
-
-            }
-            /*1E5562;*/
-            .boxes{
-                margin-left: 80px;
-                text-align: center;
-                width: 500px;
-                padding: 10px;
-            }
-            #total{
-                /*text-align: center;*/
-                font-size: 20px;
-            }
-            #tag{
-                font-size: 20px;
-            }
-            .header{
-                background-color: gray;
-            }
-            .first{
-                background-color: silver;
-            }
-            .second{
-                background-color: white;
-            }
-
-        </style>
+        <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
     <body>
-        <h1 id='title' class='boxes'>Comparison {{current_date}}</h1>
-        <div class='boxes'>
-            {% if rows %}
-                        {% if inventory_only_items %}
-                            <table>
-                                <thead>
-                                    <th colspan="4">Items in Inventory but NOT in Comparison File</th>
-                                </thead>
-                                <tbody>
+        <h1 id='title' class='print boxes'>Comparison {{current_date}}</h1>
+        <div class='print boxes'>
+            {% if inventory_only_items %}
+                <table>
+                    <thead>
+                        <th class ="print" colspan="4">Items in Inventory but NOT in Comparison File</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class='header'><strong>Sku</strong></td>
+                            <td class='header' style="width:40px"><strong>#</strong></td>
+                            <td class='header'><strong>Item Value</strong></td>
+                            <td class='header'><strong>Total Value</strong></td>
+                        
+                            {% for row in inventory_only_items %}
+                                {% if loop.index %2 == 0 %}
+                                    <tr class="first">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>${{row[2]}}</td>
+                                        <td>${{row[3]}}</td>
                                     <tr>
-                                        <td class='header'><strong>Sku</strong></td>
-                                        <td class='header' style="width:40px"><strong>#</strong></td>
-                                        <td class='header'><strong>Item Value</strong></td>
-                                        <td class='header'><strong>Total Value</strong></td>
-                                    
-                                        {% for row in inventory_only_items %}
-                                            {% if loop.index %2 == 0 %}
-                                                <tr class="first">
-                                                    <td>{{row[0]}}</td>
-                                                    <td>{{row[1]}}</td>
-                                                    <td>${{row[2]}}</td>
-                                                    <td>${{row[3]}}</td>
-                                                <tr>
-                                            {% else %}
-                                                <tr class="second">
-                                                    <td>{{row[0]}}</td>
-                                                    <td>{{row[1]}}</td>
-                                                    <td>${{row[2]}}</td>
-                                                    <td>${{row[3]}}</td>
-                                                <tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endif %}
-                        {% if comparison_only_items %}
-                            <table>
-                                <thead>
-                                    <th colspan="4">Items in Comparison File but NOT in Inventory</th>
-                                </thead>
-                                <tbody>
+                                {% else %}
+                                    <tr class="second">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>${{row[2]}}</td>
+                                        <td>${{row[3]}}</td>
                                     <tr>
-                                        <td class='header'><strong>Bar Code</strong></td>
-                                        <td class='header' style="width:40px"><strong>#</strong></td>
-                                        <td class='header'><strong>Item Value</strong></td>
-                                        <td class='header'><strong>Total Value</strong></td>
-                                    
-                                        {% for row in comparison_only_items %}
-                                            {% if loop.index %2 == 0 %}
-                                                <tr class="first">
-                                                    <td>{{row[0]}}</td>
-                                                    <td>{{row[1]}}</td>
-                                                    <td>${{row[2]}}</td>
-                                                    <td>${{row[3]}}</td>
-                                                <tr>
-                                            {% else %}
-                                                <tr class="second">
-                                                    <td>{{row[0]}}</td>
-                                                    <td>{{row[1]}}</td>
-                                                    <td>${{row[2]}}</td>
-                                                    <td>${{row[3]}}</td>
-                                                <tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endif %}
-                        {% if unequal_items %}
-                            <table>
-                                <thead>
-                                    <th colspan="4">Inventory Record</th>
-                                    <th colspan="8">Comparison File Record</th>
-                                </thead>
-                                <tbody>
+                                {% endif %}
+                            {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if comparison_only_items %}
+                <table>
+                    <thead>
+                        <th class ="print" colspan="4">Items in Comparison File but NOT in Inventory</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class='header'><strong>Bar Code</strong></td>
+                            <td class='header' style="width:40px"><strong>#</strong></td>
+                            <td class='header'><strong>Item Value</strong></td>
+                            <td class='header'><strong>Total Value</strong></td>
+                        
+                            {% for row in comparison_only_items %}
+                                {% if loop.index %2 == 0 %}
+                                    <tr class="first">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>${{row[2]}}</td>
+                                        <td>${{row[3]}}</td>
                                     <tr>
-                                        <td class='header'><strong>Bar Code</strong></td>
-                                        <td class='header' style="width:40px"><strong>#</strong></td>
-                                        <td class='header'><strong>Item Value</strong></td>
-                                        <td class='header'><strong>Total Value</strong></td>
-                                        <td class='header'><strong>Bar Code</strong></td>
-                                        <td class='header' style="width:40px"><strong>#</strong></td>
-                                        <td class='header'><strong>Item Value</strong></td>
-                                        <td class='header'><strong>Total Value</strong></td>
-                                    
-                                        {% for row in unequal_items %}
-                                            {% if loop.index %2 == 0 %}
-                                                <tr class="first">
-                                                    <td>{{row[0]}}</td>
-                                                    <td>{{row[1]}}</td>
-                                                    <td>${{row[2]}}</td>
-                                                    <td>${{row[3]}}</td>
-                                                    <td>{{row[4]}}</td>
-                                                    <td>{{row[5]}}</td>
-                                                    <td>${{row[6]}}</td>
-                                                    <td>${{row[7]}}</td>
-                                                <tr>
-                                            {% else %}
-                                                <tr class="second">
-                                                    <td>{{row[0]}}</td>
-                                                    <td>{{row[1]}}</td>
-                                                    <td>${{row[2]}}</td>
-                                                    <td>${{row[3]}}</td>
-                                                    <td>{{row[4]}}</td>
-                                                    <td>{{row[5]}}</td>
-                                                    <td>${{row[6]}}</td>
-                                                    <td>${{row[7]}}</td>
-                                                <tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endif %}
-                    {% else %}
-                        <div class='no_compare'>No Comparison File Currently uploaded</div>
-                        <div class='no_compare'>Click <a id="here" href="/upload_compare">here </a>to upload a file</div>
-                        {% for message in get_flashed_messages() %}
-                            <p id="message">{{message}}</p>
-                        {% endfor %}
-                        <form id="upload_form"  action="{{url_for("upload_comparison")}}" method='POST'>
-                            <div id='upload_title'>Upload a Comparison File Here</div>
-                            <input type="text" id="form" placeholder="Comparison File Name" name="file"><br>
-                            <input type="submit" id="submit" value="Submit">
-                        </form>
-                    {% endif %}
+                                {% else %}
+                                    <tr class="second">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>${{row[2]}}</td>
+                                        <td>${{row[3]}}</td>
+                                    <tr>
+                                {% endif %}
+                            {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            {% if unequal_items %}
+                <table>
+                    <thead>
+                        <th class ="print" colspan="4">Inventory Record</th>
+                        <th class ="print" colspan="8">Comparison File Record</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class='header'><strong>Bar Code</strong></td>
+                            <td class='header' style="width:40px"><strong>#</strong></td>
+                            <td class='header'><strong>Item Value</strong></td>
+                            <td class='header'><strong>Total Value</strong></td>
+                            <td class='header'><strong>Bar Code</strong></td>
+                            <td class='header' style="width:40px"><strong>#</strong></td>
+                            <td class='header'><strong>Item Value</strong></td>
+                            <td class='header'><strong>Total Value</strong></td>
+                        
+                            {% for row in unequal_items %}
+                                {% if loop.index %2 == 0 %}
+                                    <tr class="first">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>${{row[2]}}</td>
+                                        <td>${{row[3]}}</td>
+                                        <td>{{row[5]}}</td>
+                                        <td>{{row[6]}}</td>
+                                        <td>${{row[7]}}</td>
+                                        <td>${{row[8]}}</td>
+                                    <tr>
+                                {% else %}
+                                    <tr class="second">
+                                        <td>{{row[0]}}</td>
+                                        <td>{{row[1]}}</td>
+                                        <td>${{row[2]}}</td>
+                                        <td>${{row[3]}}</td>
+                                        <td>{{row[5]}}</td>
+                                        <td>{{row[6]}}</td>
+                                        <td>${{row[7]}}</td>
+                                        <td>${{row[8]}}</td>
+                                    <tr>
+                                {% endif %}
+                            {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
         </div>
         
     </body>
