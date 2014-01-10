@@ -1,4 +1,262 @@
-body{
-    background-color: blue;
+/*main*/
+#background_main{
+    margin: 0px;
+    background-image: url('http://www.silvique.comxa.com/web_images/silvique_promo_better_photos__no_name.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: black;
+    background-size: 90%;
 }
+.nav_bar{
+    font-family: Verdana;
+    height: 55px;
+    background-color: black;
+    width: auto; 
+}
+.nav_bar_silver{
+    font-family: Verdana;
+    height: 55px;
+    background-color: black;
+    width: auto; 
+    border-bottom: 1px solid silver;
+}
+
+.buttons{
+    color: silver;
+    float: left;
+    padding: 3px;
+    padding-right: 20px;
+    margin: 15px 0px 15px 5px;
+}
+.buttons.silvique{
+    font-family: cursive;
+    font-size: 32px;
+    margin: 0px 20px 0px 45px;
+    color: 7D1A5C;
+}
+.buttons.print{
+    float: right;
+}
+.buttons.clear{
+    float: right;
+}
+a{
+    color: silver;
+    text-decoration: none;
+}
+a:hover{
+    color: 197739;
+}
+
+#center_bar{
+    width: 60%;
+    background-color: black;
+    margin: auto;
+    margin-top: 150px;
+    padding: 100px;
+    border-radius:25px;
+    border: 1px solid silver;
+}
+#main_title{
+    font-family: cursive;
+    font-size: 70px; 
+
+}
+.center{
+    width: auto;
+    text-align: center;
+    color: silver;
+}
+#name{
+    font-size: 40px;
+    color: 197739;
+}
+
+/*show_inventory*/
+
+.background_show{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    background-color: black;
+    font-family: Verdana;
+}
+.boxes.title{
+    color: 7D1A5C;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    background-color: black;
+    /*width: 200px;*/
+}
+table{
+    width: 600px;
+    border-collapse:collapse;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+}
+th, td{
+    padding: 10px 10px 10px 10px;
+    border: 1px solid E3D8D8;
+
+}
+th{
+    /*background-color: black;*/
+    color: white;
+}
+.boxes{
+    margin: auto;
+    text-align: center;
+    width: 100%;
+    padding-top: 10px;
+    
+}
+.table_div{
+    height: 550px;
+    overflow-y: auto;
+    margin-top: 0px;
+    padding-top: 10px;
+    margin-right: 0px;
+}
+#total{
+    font-size: 20px;
+}
+.tag{
+    font-size: 20px;
+}
+.header{
+    background-color: gray;
+}
+
+/*#left_box{
+    background-color: 197739;
+    position: absolute;
+    width: 200px;
+    height: 100%;
+}*/
+.right_box{
+    position: absolute;
+    width: 100%;
+    margin: auto;
+}
+.main_boxes{
+    float: left;
+}
+.first{
+    background-color: silver;
+}
+.second{
+    background-color: white;
+}
+.total{
+    color: 197739;
+}
+#message_box{
+    position: absolute;
+    top: 183px;
+    right: 40px;
+    color: silver;
+    width: 300px;
+}
+#add{
+    color: 197739;
+}
+.silvique_inside{
+    color: 7D1A5C;
+}
+/*upload*/
+.upload_form{
+    background-color: black;
+    width: 50%;
+    margin: auto;
+    margin-top: 100px;
+    height: 500px;
+    border-radius:25px;
+}
+#compare.upload_form{
+    background-color: silver;
+}
+#sale.upload_form{
+    background-color: 197739;
+}
+.form{
+    padding: 15px;
+    margin: 100px 120px 0px 180px;
+    font-size: 20px;
+    text-align: center;
+    width: 50%;
+    height: 30px;
+}
+.submit{
+    margin: 5px 120px 50px 180px;
+    font-size: 15px;
+    text-align: center;
+    width: 50%;
+    height: 30px;
+    background-color: 197739;
+}
+.sale.submit{
+    background-color: black;
+    color: silver;
+}
+.upload_title{
+    color: silver;
+    font-size: 40px;
+    text-align: center;
+    width: 100%;
+    padding-top: 100px;
+}
+#compare.upload_title{
+    color: black;
+}
+#sale.upload_title{
+    color: black;
+}
+.no_compare{
+    width: 400px;
+    /*background-color: silver;*/
+    color: silver;
+    margin: auto;
+}
+#here{
+    color: 197739;
+}
+.message{
+    position: absolute;
+    margin-left: 600px;
+    margin-top: 50px;
+    color: black;
+}
+#compare.message{
+    color: silver;
+}
+/*compare*/
+.background_upload{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    background-color: silver;
+    font-family: Verdana;
+}
+/*print*/
+.background-print{
+    background-color: white;
+}
+.print.boxes{
+    margin-left: 50px;
+    width: 600px;
+}
+.print th{
+    color: black;
+}
+
+
+
+
+
+
+
+
+
 
