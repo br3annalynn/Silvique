@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 DB = None
 CONN = None
@@ -29,23 +30,41 @@ def check_inventory(file_type, bar_code, value):
 
 def delete_row(file_type, bar_code):
     connect_to_db()
-    if file_type == "I":
-        query = """DELETE FROM inventory WHERE barCode = ?"""
-    else:
+    if file_type == "C":
         query = """DELETE FROM comparison WHERE barCode = ?"""
+    else:
+        query = """DELETE FROM inventory WHERE barCode = ?"""
     DB.execute(query, (bar_code,))
     CONN.commit()
-    print "deleted item", bar_code
+    # print "deleted item", bar_code
 
 def add_to_inventory(file_type, bar_code, amount, single_value, total_value):
     connect_to_db()
     if file_type == "I":
-        query = """INSERT into inventory values (?, ?, ?, ?)"""
+        query = """INSERT into inventory values (?, ?, ?, ?, ?)"""
     else:
-        query = """INSERT into comparison values (?, ?, ?, ?)"""
-    DB.execute(query, (bar_code, amount, single_value, total_value))
+        query = """INSERT into comparison values (?, ?, ?, ?, ?)"""
+    current_date = datetime.date.today()
+    DB.execute(query, (bar_code, amount, single_value, total_value, current_date))
     CONN.commit()
     print "Added item", bar_code
+
+def delete_from_inventory(bar_code, value):
+    connect_to_db()
+    query = """SELECT amount FROM inventory WHERE barCode = ?"""
+    DB.execute(query, (bar_code,))
+    row = DB.fetchone()
+    if not row:
+        # add flash message
+        print "item not found: ", bar_code
+        return
+    else:
+        file_type = "I"
+        delete_row(file_type, bar_code)
+        amount = row[0] - 1
+        single_value = value
+        total_value = single_value * amount
+    add_to_inventory(file_type, bar_code, amount, single_value, total_value)
 
 def show_inventory():
     connect_to_db()

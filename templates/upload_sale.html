@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Upload Comparison File</title>
+        <title>Upload Sale</title>
         <style type="text/css">
             body{
                 margin: 0px;
@@ -24,8 +24,11 @@
                 color: silver;
                 text-decoration: none;
             }
+            a:hover{
+                color: 197739;
+            }
             #upload_form{
-                background-color: black;
+                background-color: 197739;
                 width: 50%;
                 margin: auto;
                 margin-top: 100px;
@@ -46,10 +49,11 @@
                 text-align: center;
                 width: 50%;
                 height: 30px;
-                background-color: 197739;
+                background-color: black;
+                color: silver;
             }
             #upload_title{
-                color: silver;
+                color: black;
                 font-size: 40px;
                 text-align: center;
                 width: 100%;
@@ -85,9 +89,9 @@
         {% for message in get_flashed_messages() %}
             <p id="message">{{message}}</p>
         {% endfor %}
-        <form id="upload_form"  action="{{url_for("upload_comparison")}}" method='POST'>
-            <div id='upload_title'>Upload a Comparison File Here</div>
-            <input type="text" id="form" placeholder="Comparison File Name" name="file"><br>
+        <form id="upload_form"  action="{{url_for("upload_sale")}}" method='POST'>
+            <div id='upload_title'>Upload a Sale Here</div>
+            <input type="text" id="form" placeholder="Sale File Name" name="file"><br>
             <input type="submit" id="submit" value="Submit">
         </form>
     </body>
