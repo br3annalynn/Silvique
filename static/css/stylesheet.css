@@ -224,9 +224,10 @@ th{
 }
 .message{
     position: absolute;
-    margin-left: 600px;
     margin-top: 50px;
     color: black;
+    width: 100%;
+    text-align: center;
 }
 #compare.message{
     color: silver;

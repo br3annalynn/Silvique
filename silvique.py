@@ -2,6 +2,7 @@ from xlrd import open_workbook, cellname
 import model
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import datetime
+from xlwt import Workbook
 
 app = Flask(__name__)
 app.secret_key = "shhhhthisisasecret"
@@ -57,7 +58,12 @@ def read_bar_codes(file_type, sheet):
         # check that cell is not empty
         if bar_code:
             # change last three elements of string to integer
-            value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
+            try:
+                value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
+            except TypeError:
+                flash(bar_code)
+                print "Not a valid sku. Skipping ", bar_code
+                continue
             # check that sku is valid (ends in 3 numbers)
             if not value:
                 flash(bar_code)
@@ -149,6 +155,68 @@ def upload_sales_report():
         print "No file found with the name ", file_name
         return redirect(url_for('upload_sale'))
 
+@app.route("/save_inventory")
+def save_inv():
+    return render_template('save_inventory.html')
+
+@app.route("/save_inventory", methods=['POST'])
+def save_inventory():
+    current_date = datetime.date.today().strftime("%m/%d/%y")
+    global XLS_FOLDER
+    book = Workbook()
+    sheet1 = book.add_sheet('inventory')
+    file_name = request.form.get('file')
+    inventory_list = model.show_inventory()
+    sheet1.write(0, 0, "Inventory " + current_date) 
+    sheet1.write(1, 0, "Tag Total")
+    sheet1.write(2, 0, "1/2 Tag Total")
+    sheet1.write(4, 0, "Sku")
+    sheet1.write(4, 1, "#")
+    sheet1.write(4, 2, "Tag")
+    sheet1.write(4, 3, "Total")
+
+
+    total = 0
+    single_row = 0
+    while single_row < len(inventory_list):
+        print_row = sheet1.row(single_row + 5)
+        print_row.write(0, inventory_list[single_row][0])
+        print_row.write(1, inventory_list[single_row][1])
+        print_row.write(2, inventory_list[single_row][2])
+        print_row.write(3, inventory_list[single_row][3])
+        total += inventory_list[single_row][3]
+        single_row +=1
+
+    sheet1.write(1, 1, total)
+    sheet1.write(2, 1, total / 2)
+    book.save(XLS_FOLDER + file_name)
+
+    flash("Successfully saved " + file_name)
+    return redirect(url_for('save_inv'))
+
+@app.route("add_skus")
+def add_skus():
+    return render_template('add_skus.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

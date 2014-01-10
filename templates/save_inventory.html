@@ -1,10 +1,10 @@
 <html>
     <head>
-        <title>Upload Sale</title>
+        <title>Save Inventory</title>
         <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
-    <body class="background_show">
-        <div class="nav_bar_silver">
+    <body class="background_upload">
+        <div class="nav_bar">
             <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
@@ -15,8 +15,8 @@
         {% for message in get_flashed_messages() %}
             <p class="message">{{message}}</p>
         {% endfor %}
-        <form id="sale" class="upload_form"  action="{{url_for("upload_sale")}}" method='POST'>
-            <div id="sale" class='upload_title'>Upload a Sale Here</div>
+        <form id="sale" class="upload_form"  action="{{url_for("save_inventory")}}" method='POST'>
+            <div id="sale" class='upload_title'>Save File As</div>
             <input type="text" class="form" placeholder="Sale File Name" name="file"><br>
             <input type="submit" class="sale submit" value="Submit">
         </form>
