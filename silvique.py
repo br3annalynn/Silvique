@@ -51,10 +51,12 @@ def read_bar_codes(file_type, sheet):
     elif file_type == "I":
         start = 5
     else:
-        # check where Nancy will start comarison files
-        start = 0
+        start = 2
     for row_index in range(start, sheet.nrows):
         bar_code = sheet.cell(row_index,0).value
+        amount = sheet.cell(row_index, 2).value
+        if not amount:
+            amount = 1
         # check that cell is not empty
         if bar_code:
             # change last three elements of string to integer
@@ -70,9 +72,9 @@ def read_bar_codes(file_type, sheet):
                 print "Not a valid sku. Skipping ", bar_code
                 continue
             if file_type == "S":
-                model.delete_from_inventory(bar_code, value)
+                model.delete_from_inventory(bar_code, value, amount)
             else:
-                model.check_inventory(file_type, bar_code, value)
+                model.check_inventory(file_type, bar_code, value, amount)
         else:
             continue
 
@@ -194,10 +196,28 @@ def save_inventory():
     flash("Successfully saved " + file_name)
     return redirect(url_for('save_inv'))
 
-@app.route("add_skus")
+@app.route("/add_skus")
 def add_skus():
     return render_template('add_skus.html')
 
+@app.route("/add_skus", methods=['POST'])
+def add_inv_skus():
+    bar_code = request.form.get('i_sku')
+    value = int(request.form.get('i_value'))
+    amount = int(request.form.get('i_amount'))
+    file_type = "I"
+    model.check_inventory(file_type, bar_code, value, amount)
+    flash("Successfully added " + bar_code + " to inventory")
+    return redirect(url_for('add_skus'))
+
+@app.route("/add_skus", methods=['POST'])
+def add_sale_skus():
+    bar_code = request.form.get('s_sku')
+    value = int(request.form.get('s_value'))
+    amount = int(request.form.get('s_amount'))
+    model.delete_from_inventory(bar_code, value, amount)
+    flash("Successfully added " + bar_code + " to sale")
+    return redirect(url_for('add_skus'))
 
 if __name__ == "__main__":
     app.run(debug=True)

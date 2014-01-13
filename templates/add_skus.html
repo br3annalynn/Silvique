@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>Add Sku's</title>
+        <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
+    </head>
+    <body class="background_upload">
+        <div class="nav_bar">
+            <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
+            <div class="buttons"><a href="/show">View Inventory</a></div>
+            <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
+            <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
+            <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
+            <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
+            <div class="selected buttons">Add Sku's</div>
+        </div>
+        {% for message in get_flashed_messages() %}
+            <p class="message">{{message}}</p>
+        {% endfor %}
+        <form class="small_form"  action="{{url_for("add_inv_skus")}}" method='POST'>
+            <div id='small_title'>Add to Inventory</div>
+            <div class="form_box">
+                <input type="text" class="small_form_input left" placeholder="Sku" name="i_sku">
+                <input type="text" class="small_form_input" placeholder="Tag Price" name="i_value">
+                <input type="text" class="small_form_input" placeholder="Amount" name="i_amount">
+            </div>
+            <input type="submit" class="small submit" value="Submit">
+        </form>
+        <form class="small_form two"  action="{{url_for("add_sale_skus")}}" method='POST'>
+            <div id='small_title_two'>Add to Sale</div>
+            <div class="form_box">
+                <input type="text" class="small_form_input left" placeholder="Sku" name="s_sku">
+                <input type="text" class="small_form_input" placeholder="Tag Price" name="s_value">
+                <input type="text" class="small_form_input" placeholder="Amount" name="s_amount">
+            </div>
+            <input type="submit" class="small submit" value="Submit">
+        </form>
+    </body>
+</html>

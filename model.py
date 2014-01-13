@@ -9,7 +9,7 @@ def connect_to_db():
     CONN = sqlite3.connect('inventory.db')
     DB = CONN.cursor()
 
-def check_inventory(file_type, bar_code, value):
+def check_inventory(file_type, bar_code, value, number):
     connect_to_db()
     if file_type == "I":
         query = """SELECT amount, singleValue, totalValue FROM inventory WHERE barCode = ?"""
@@ -18,12 +18,12 @@ def check_inventory(file_type, bar_code, value):
     DB.execute(query, (bar_code,))
     row = DB.fetchone()
     if not row:
-        amount = 1
+        amount = number
         single_value = value
-        total_value = value
+        total_value = single_value * amount
     else:
         delete_row(file_type, bar_code)
-        amount = row[0] + 1
+        amount = row[0] + number
         single_value = row[1]
         total_value = single_value * amount
     add_to_inventory(file_type, bar_code, amount, single_value, total_value)
@@ -47,28 +47,28 @@ def add_to_inventory(file_type, bar_code, amount, single_value, total_value):
     current_date = datetime.date.today()
     DB.execute(query, (bar_code, amount, single_value, total_value, current_date))
     CONN.commit()
-    print "Added item", bar_code
+    # print "Added item", bar_code
 
-def delete_from_inventory(bar_code, value):
+def delete_from_inventory(bar_code, value, number):
     connect_to_db()
     query = """SELECT amount FROM inventory WHERE barCode = ?"""
     DB.execute(query, (bar_code,))
     row = DB.fetchone()
     if not row:
         # add flash message
-        print "item not found: ", bar_code
+        print "Item not found: ", bar_code
         return
     else:
         file_type = "I"
         delete_row(file_type, bar_code)
-        amount = row[0] - 1
+        amount = row[0] - number
         single_value = value
         total_value = single_value * amount
     add_to_inventory(file_type, bar_code, amount, single_value, total_value)
 
 def show_inventory():
     connect_to_db()
-    query = """SELECT * from inventory ORDER BY barCode COLLATE NOCASE"""
+    query = """SELECT * from inventory WHERE amount > 0 ORDER BY barCode COLLATE NOCASE"""
     DB.execute(query, ())
     rows = DB.fetchall()
     return rows
