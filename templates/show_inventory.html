@@ -14,6 +14,11 @@
             <div class="buttons"><a href="/add_skus">Add Sku's</a></div>
             <div class="print buttons"><a href="/print_view">Print View</a></div>
         </div>
+        <div id="left_box">
+            <div>Inventory</div>
+            <div>Sales</div>
+            <div>Filter by Sku</div>
+        </div>
         <div id="message_box">
             {% if get_flashed_messages() %}
                 <p> Invalid Sku's found. Write down these numbers and choose <span id="add">Add Sku's</span> to re-enter: </p>

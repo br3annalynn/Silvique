@@ -30,7 +30,7 @@
 .buttons.silvique{
     font-family: cursive;
     font-size: 32px;
-    margin: 0px 20px 0px 45px;
+    margin: 0px 45px 0px 30px;
     color: 7D1A5C;
 }
 .buttons.print{
@@ -40,9 +40,9 @@
     float: right;
 }
 .selected.buttons{
-    /*color: 197739;*/
-    box-shadow: inset -3px -3px 3px #585858;
-    border-radius: 5px;
+    color: 197739;
+    /*box-shadow: inset -3px -3px 3px #585858;
+    b*/order-radius: 5px;
 }
 a{
     color: silver;
@@ -133,12 +133,17 @@ th{
     background-color: gray;
 }
 
-/*#left_box{
-    background-color: 197739;
+#left_box{
     position: absolute;
-    width: 200px;
+    left:0px;
+    top: 56px;
+    width: 164px;
     height: 100%;
-}*/
+    color: silver;
+    border-right: 1px solid silver;
+    padding-top: 50px;
+    padding-left: 20px;
+}
 .right_box{
     position: absolute;
     width: 100%;
@@ -283,7 +288,7 @@ th{
     width: 40%;
     margin: auto;
     margin-top: 100px;
-    margin-right: 30px;
+    margin-left: 6.7%;
     height: 500px;
     border-radius:25px;
     float:left;
@@ -305,6 +310,12 @@ th{
     width: 100%;
     padding-top: 100px;
 }
+
+#both{
+    position: absolute;
+    width: 100%;
+}
+
 
 
 

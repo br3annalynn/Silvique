@@ -37,7 +37,7 @@ def upload_inventory():
         sheet = book.sheet_by_index(0)
         # I for inventory, C for comparison, S for sale
         file_type = 'I'
-        read_bar_codes(file_type, sheet)
+        read_bar_codes(file_name, file_type, sheet)
         return redirect(url_for('display_inventory'))
     except IOError:
         flash("File not found. Check file name. ")
@@ -45,7 +45,7 @@ def upload_inventory():
         return redirect(url_for('upload_inventory'))
     
 
-def read_bar_codes(file_type, sheet):
+def read_bar_codes(file_name, file_type, sheet):
     if file_type == "S":
         start = 6
     elif file_type == "I":
@@ -54,11 +54,15 @@ def read_bar_codes(file_type, sheet):
         start = 2
     for row_index in range(start, sheet.nrows):
         bar_code = sheet.cell(row_index,0).value
-        amount = sheet.cell(row_index, 2).value
+        if file_type == "S":
+            amount = -1
+        else:
+            amount = sheet.cell(row_index, 3).value
         if not amount:
             amount = 1
         # check that cell is not empty
         if bar_code:
+            bar_code = bar_code.upper()
             # change last three elements of string to integer
             try:
                 value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
@@ -71,10 +75,8 @@ def read_bar_codes(file_type, sheet):
                 flash(bar_code)
                 print "Not a valid sku. Skipping ", bar_code
                 continue
-            if file_type == "S":
-                model.delete_from_inventory(bar_code, value, amount)
-            else:
-                model.check_inventory(file_type, bar_code, value, amount)
+            model.check_inventory(file_type, bar_code, value, amount)
+            model.add_to_table(file_name, bar_code, value, amount)
         else:
             continue
 
@@ -112,7 +114,7 @@ def upload_comparison():
         sheet = book.sheet_by_index(0)
         # I for inventory, C for comparison, S for sale
         file_type = 'C'
-        read_bar_codes(file_type, sheet)
+        read_bar_codes(file_name, file_type, sheet)
         return redirect(url_for('display_comparison'))
     except IOError:
         flash("File not found. Check file name. ")
@@ -150,7 +152,7 @@ def upload_sales_report():
         sheet = book.sheet_by_index(0)
         # I for inventory, C for comparison, S for sale
         file_type = 'S'
-        read_bar_codes(file_type, sheet)
+        read_bar_codes(file_name, file_type, sheet)
         return redirect(url_for('display_inventory'))
     except IOError:
         flash("File not found. Check file name. ")
@@ -177,7 +179,6 @@ def save_inventory():
     sheet1.write(4, 2, "Tag")
     sheet1.write(4, 3, "Total")
 
-
     total = 0
     single_row = 0
     while single_row < len(inventory_list):
@@ -201,23 +202,23 @@ def add_skus():
     return render_template('add_skus.html')
 
 @app.route("/add_skus", methods=['POST'])
-def add_inv_skus():
-    bar_code = request.form.get('i_sku')
-    value = int(request.form.get('i_value'))
-    amount = int(request.form.get('i_amount'))
+def add_new_skus():
+    if request.form['btn'] == 'Add to Inventory':
+        bar_code = request.form.get('i_sku')
+        value = int(request.form.get('i_value'))
+        amount = int(request.form.get('i_amount'))
+        file_name = request.form.get('i_file_name')
+    else:
+        bar_code = request.form.get('s_sku')
+        value = int(request.form.get('s_value'))
+        amount = -1 * int(request.form.get('s_amount'))
+        file_name = request.form.get('s_file_name')
     file_type = "I"
     model.check_inventory(file_type, bar_code, value, amount)
-    flash("Successfully added " + bar_code + " to inventory")
+    model.add_to_table(file_name, bar_code, value, amount)
+    flash("Successfully added " + bar_code)
     return redirect(url_for('add_skus'))
 
-@app.route("/add_skus", methods=['POST'])
-def add_sale_skus():
-    bar_code = request.form.get('s_sku')
-    value = int(request.form.get('s_value'))
-    amount = int(request.form.get('s_amount'))
-    model.delete_from_inventory(bar_code, value, amount)
-    flash("Successfully added " + bar_code + " to sale")
-    return redirect(url_for('add_skus'))
 
 if __name__ == "__main__":
     app.run(debug=True)

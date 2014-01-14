@@ -16,23 +16,31 @@
         {% for message in get_flashed_messages() %}
             <p class="message">{{message}}</p>
         {% endfor %}
-        <form class="small_form"  action="{{url_for("add_inv_skus")}}" method='POST'>
-            <div id='small_title'>Add to Inventory</div>
-            <div class="form_box">
-                <input type="text" class="small_form_input left" placeholder="Sku" name="i_sku">
-                <input type="text" class="small_form_input" placeholder="Tag Price" name="i_value">
-                <input type="text" class="small_form_input" placeholder="Amount" name="i_amount">
-            </div>
-            <input type="submit" class="small submit" value="Submit">
-        </form>
-        <form class="small_form two"  action="{{url_for("add_sale_skus")}}" method='POST'>
-            <div id='small_title_two'>Add to Sale</div>
-            <div class="form_box">
-                <input type="text" class="small_form_input left" placeholder="Sku" name="s_sku">
-                <input type="text" class="small_form_input" placeholder="Tag Price" name="s_value">
-                <input type="text" class="small_form_input" placeholder="Amount" name="s_amount">
-            </div>
-            <input type="submit" class="small submit" value="Submit">
-        </form>
+        <div id="both">
+            <form class="small_form"  action="{{url_for("add_new_skus")}}" method='POST'>
+                <div id='small_title'>Add to Inventory</div>
+<!--                 <select id="inv_select">
+                    <option value="Inventory1">Inventory 1</option>
+                    <option value="Inventory2">Inventory 2</option>                    
+                </select>
+ -->                <div class="form_box">
+                    <input type="text" class="small_form_input left" placeholder="Sku" name="i_sku">
+                    <input type="text" class="small_form_input" placeholder="Tag Price" name="i_value">
+                    <input type="text" class="small_form_input" placeholder="Amount" name="i_amount">
+<!--                     <input type="text" class="small_form_input" placeholder="File Name" name="i_file_name">
+ -->                </div>
+                <input type="submit" class="small submit" name='btn' value="Add to Inventory">
+            </form>
+            <form class="small_form two"  action="{{url_for("add_new_skus")}}" method='POST'>
+                <div id='small_title_two'>Add to Sale</div>
+                <div class="form_box">
+                    <input type="text" class="small_form_input left" placeholder="Sku" name="s_sku">
+                    <input type="text" class="small_form_input" placeholder="Tag Price" name="s_value">
+                    <input type="text" class="small_form_input" placeholder="Amount" name="s_amount">
+<!--                     <input type="text" class="small_form_input" placeholder="File Name" name="s_file_name">
+ -->                </div>
+                <input type="submit" class="small submit" name='btn' value="Add to Sale">
+            </form>
+        </div>
     </body>
 </html>

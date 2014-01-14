@@ -1,5 +1,4 @@
 import sqlite3
-import datetime
 
 DB = None
 CONN = None
@@ -11,10 +10,10 @@ def connect_to_db():
 
 def check_inventory(file_type, bar_code, value, number):
     connect_to_db()
-    if file_type == "I":
-        query = """SELECT amount, singleValue, totalValue FROM inventory WHERE barCode = ?"""
-    else:
+    if file_type == "C":
         query = """SELECT amount, singleValue, totalValue FROM comparison WHERE barCode = ?"""
+    else:
+        query = """SELECT amount, singleValue, totalValue FROM inventory WHERE barCode = ?"""
     DB.execute(query, (bar_code,))
     row = DB.fetchone()
     if not row:
@@ -40,31 +39,42 @@ def delete_row(file_type, bar_code):
 
 def add_to_inventory(file_type, bar_code, amount, single_value, total_value):
     connect_to_db()
-    if file_type == "I":
-        query = """INSERT into inventory values (?, ?, ?, ?, ?)"""
+    if file_type == "C":
+        query = """INSERT into comparison values (?, ?, ?, ?)"""
     else:
-        query = """INSERT into comparison values (?, ?, ?, ?, ?)"""
-    current_date = datetime.date.today()
-    DB.execute(query, (bar_code, amount, single_value, total_value, current_date))
+        query = """INSERT into inventory values (?, ?, ?, ?)"""
+    DB.execute(query, (bar_code, amount, single_value, total_value))
     CONN.commit()
     # print "Added item", bar_code
 
-def delete_from_inventory(bar_code, value, number):
+def add_to_table(file_name, bar_code, value, number):
+    # see if table exists
+    file_name = file_name[:-4]
     connect_to_db()
-    query = """SELECT amount FROM inventory WHERE barCode = ?"""
+    query = """CREATE TABLE IF NOT EXISTS """ + file_name + """ (barCode varchar(30), amount int, singleValue int, totalValue int)"""
+    DB.execute(query, ())
+    CONN.commit()
+    query = """SELECT amount, singleValue, totalValue FROM """ + file_name + """ WHERE barCode = ?"""
     DB.execute(query, (bar_code,))
     row = DB.fetchone()
     if not row:
-        # add flash message
-        print "Item not found: ", bar_code
-        return
-    else:
-        file_type = "I"
-        delete_row(file_type, bar_code)
-        amount = row[0] - number
+        amount = number
         single_value = value
         total_value = single_value * amount
-    add_to_inventory(file_type, bar_code, amount, single_value, total_value)
+    else:
+        delete_row_from_table(file_name, bar_code)
+        amount = row[0] + number
+        single_value = row[1]
+        total_value = single_value * amount
+    query = """INSERT into """ + file_name + """ values (?, ?, ?, ?)"""
+    DB.execute(query, (bar_code, amount, value, total_value))
+    CONN.commit() 
+
+def delete_row_from_table(file_name, bar_code):
+    connect_to_db()
+    query = """DELETE FROM """ + file_name + """ WHERE barCode = ?"""
+    DB.execute(query, (bar_code,))
+    CONN.commit()
 
 def show_inventory():
     connect_to_db()
