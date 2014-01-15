@@ -3,6 +3,7 @@ import model
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import datetime
 from xlwt import Workbook
+import json
 
 app = Flask(__name__)
 app.secret_key = "shhhhthisisasecret"
@@ -20,6 +21,21 @@ def display_inventory():
     for row in inventory_list:
         total += row[3]
     return render_template('show_inventory.html', inventory_list=inventory_list, total=total)
+
+@app.route("/get_lists")
+def get_lists():
+    inventory_list = []
+    sales_list = []
+    rows = model.list_tables()
+    for row in rows:
+        first_letter = row[0][0]
+        if first_letter == "i" or first_letter == "I":
+            # skip the main inventory table
+            if row[0] != "inventory":
+                inventory_list.append(row[0])
+        elif first_letter == "s" or first_letter == "S":
+            sales_list.append(row[0])
+    return json.dumps({'inventory_list' : inventory_list, 'sales_list': sales_list})
 
 
 @app.route("/upload_inv")
@@ -54,12 +70,7 @@ def read_bar_codes(file_name, file_type, sheet):
         start = 2
     for row_index in range(start, sheet.nrows):
         bar_code = sheet.cell(row_index,0).value
-        if file_type == "S":
-            amount = -1
-        else:
-            amount = sheet.cell(row_index, 3).value
-        if not amount:
-            amount = 1
+        amount = find_amount(file_type, sheet, row_index)
         # check that cell is not empty
         if bar_code:
             bar_code = bar_code.upper()
@@ -76,9 +87,21 @@ def read_bar_codes(file_name, file_type, sheet):
                 print "Not a valid sku. Skipping ", bar_code
                 continue
             model.check_inventory(file_type, bar_code, value, amount)
-            model.add_to_table(file_name, bar_code, value, amount)
+            model.add_to_table(file_type, file_name, bar_code, value, amount)
         else:
             continue
+
+def find_amount(file_type, sheet, row_index):
+    if file_type == "S":
+        amount = -1
+    else:
+        ################ check where this amount is. Add to template.
+        amount = sheet.cell(row_index, 3).value
+    # set default value of 1
+    if not amount:
+        amount = 1
+    return amount
+
 
 def convert_to_int(a, b, c):
     #check if each is a number
@@ -183,10 +206,8 @@ def save_inventory():
     single_row = 0
     while single_row < len(inventory_list):
         print_row = sheet1.row(single_row + 5)
-        print_row.write(0, inventory_list[single_row][0])
-        print_row.write(1, inventory_list[single_row][1])
-        print_row.write(2, inventory_list[single_row][2])
-        print_row.write(3, inventory_list[single_row][3])
+        for i in range(0, 4):
+            print_row.write(i, inventory_list[single_row][i])
         total += inventory_list[single_row][3]
         single_row +=1
 
@@ -202,20 +223,21 @@ def add_skus():
     return render_template('add_skus.html')
 
 @app.route("/add_skus", methods=['POST'])
+# ############### This needs help. Need to be able to specify which table the sku is being added to
 def add_new_skus():
     if request.form['btn'] == 'Add to Inventory':
         bar_code = request.form.get('i_sku')
         value = int(request.form.get('i_value'))
         amount = int(request.form.get('i_amount'))
-        file_name = request.form.get('i_file_name')
+        # file_name = request.form.get('i_file_name')
     else:
         bar_code = request.form.get('s_sku')
         value = int(request.form.get('s_value'))
         amount = -1 * int(request.form.get('s_amount'))
-        file_name = request.form.get('s_file_name')
+        # file_name = request.form.get('s_file_name')
     file_type = "I"
     model.check_inventory(file_type, bar_code, value, amount)
-    model.add_to_table(file_name, bar_code, value, amount)
+    model.add_to_table(file_type, file_name, bar_code, value, amount)
     flash("Successfully added " + bar_code)
     return redirect(url_for('add_skus'))
 

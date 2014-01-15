@@ -15,9 +15,9 @@
             <div class="print buttons"><a href="/print_view">Print View</a></div>
         </div>
         <div id="left_box">
-            <div>Inventory</div>
-            <div>Sales</div>
-            <div>Filter by Sku</div>
+            <div id="inventory" class="left_titles">Inventory</div>
+            <div id="sales" class="left_titles">Sales</div>
+            <div class="left_titles">Filter by Sku</div>
         </div>
         <div id="message_box">
             {% if get_flashed_messages() %}
@@ -34,7 +34,7 @@
                     <div class='total' id='tag'>Inventory Tag Total   ${{total}}</div>
                     <!-- <div class='total' id='total'></div> -->
                 </div>
-                <div class="table_div" class='boxes'>
+                <div id="table_div" class='boxes'>
                     <table>
                         <thead>
                         </thead>
@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-
-        
+    <script src="../static/js/jquery-2.0.3.js"></script>
+    <script src="../static/js/showFiles.js"></script>
     </body>
 </html>

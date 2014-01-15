@@ -47,7 +47,7 @@ def add_to_inventory(file_type, bar_code, amount, single_value, total_value):
     CONN.commit()
     # print "Added item", bar_code
 
-def add_to_table(file_name, bar_code, value, number):
+def add_to_table(file_type, file_name, bar_code, value, number):
     # see if table exists
     file_name = file_name[:-4]
     connect_to_db()
@@ -130,6 +130,12 @@ def show_comparison():
 
     return (rows, inventory_only_items, comparison_only_items, unequal_items)
 
+def list_tables():
+    connect_to_db()
+    query = """SELECT name FROM sqlite_master WHERE type='table';"""
+    DB.execute(query, ())
+    rows = DB.fetchall()
+    return rows
 
 
 
