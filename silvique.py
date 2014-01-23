@@ -50,7 +50,7 @@ def upload_inventory():
     print "******************Trying to open ", file_name
     try:
         book = open_workbook(XLS_FOLDER + file_name)
-        sheet = book.sheet_by_index(0)
+        sheet = book.sheet_by_index(1)
         # I for inventory, C for comparison, S for sale
         file_type = 'I'
         read_bar_codes(file_name, file_type, sheet)
@@ -67,7 +67,7 @@ def read_bar_codes(file_name, file_type, sheet):
     elif file_type == "I":
         start = 5
     else:
-        start = 2
+        start = 3
     for row_index in range(start, sheet.nrows):
         bar_code = sheet.cell(row_index,0).value
         amount = find_amount(file_type, sheet, row_index)
@@ -96,10 +96,10 @@ def find_amount(file_type, sheet, row_index):
         amount = -1
     else:
         ################ check where this amount is. Add to template.
-        amount = sheet.cell(row_index, 3).value
+        amount = sheet.cell(row_index, 1).value
     # set default value of 1
-    if not amount:
-        amount = 1
+    # if not amount:
+    #     amount = 1
     return amount
 
 
@@ -237,7 +237,7 @@ def add_new_skus():
         # file_name = request.form.get('s_file_name')
     file_type = "I"
     model.check_inventory(file_type, bar_code, value, amount)
-    model.add_to_table(file_type, file_name, bar_code, value, amount)
+    # model.add_to_table(file_type, file_name, bar_code, value, amount)
     flash("Successfully added " + bar_code)
     return redirect(url_for('add_skus'))
 

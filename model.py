@@ -102,7 +102,7 @@ def show_comparison():
     rows = DB.fetchall()
 
     # find items only in inventory
-    query = """SELECT barCode from inventory where barCode not in (select barCode from comparison)"""
+    query = """SELECT barCode from inventory where amount > 0 and barCode not in (select barCode from comparison where amount > 0) ORDER BY barCode COLLATE NOCASE"""
     DB.execute(query, ())
     inventory_only_bar_codes = DB.fetchall()
     inventory_only_items = []
@@ -113,7 +113,7 @@ def show_comparison():
         inventory_only_items.append(item)
 
     #find items only in comparison
-    query = """SELECT barCode from comparison where barCode not in (select barCode from inventory)"""
+    query = """SELECT barCode from comparison where amount > 0 and barCode not in (select barCode from inventory where amount > 0) ORDER BY barCode COLLATE NOCASE"""
     DB.execute(query, ())
     comparison_only_bar_codes = DB.fetchall()
     comparison_only_items = []
@@ -124,7 +124,7 @@ def show_comparison():
         comparison_only_items.append(item)
 
     # find items in both with unequal amounts
-    query = """SELECT * from inventory join comparison on inventory.barCode = comparison.barCode where inventory.amount != comparison.amount"""
+    query = """SELECT * from inventory join comparison on inventory.barCode = comparison.barCode where inventory.amount != comparison.amount ORDER BY barCode COLLATE NOCASE"""
     DB.execute(query, ())
     unequal_items = DB.fetchall()
 

@@ -27,6 +27,7 @@ function addClickEvents(){
     $('.files').click(function(){
         var tableName = $(this).text();
         console.log(tableName);
+        
     })
 
 }
