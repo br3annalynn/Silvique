@@ -207,11 +207,14 @@ th{
 }
 .form{
     padding: 15px;
-    margin: 20px 120px 0px 180px;
+    margin: 5px 120px 0px 180px;
     font-size: 20px;
     text-align: center;
     width: 50%;
     height: 30px;
+}
+.form.top{
+    margin-top: 70px;
 }
 .small_form_input{
     padding: 15px;
@@ -283,9 +286,7 @@ th{
     width: 100%;
     text-align: center;
 }
-.message.dark{
-    color: white;
-}
+
 #compare.message{
     color: silver;
 }

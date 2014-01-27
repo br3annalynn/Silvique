@@ -7,18 +7,18 @@
         <div class="nav_bar_silver">
             <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
-            <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
-            <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
-            <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
+<!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
+ -->        <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
             <div class="selected buttons">Upload Sale</div>
+            <div class="buttons"><a href="/upload_inv">Upload Packing List</a></div>
             <div class="buttons"><a href="/add_skus">Add Sku's</a></div>
         </div>
         {% for message in get_flashed_messages() %}
-            <p class="message dark">{{message}}</p>
+            <p>{{message}}</p>
         {% endfor %}
         <form id="sale" class="upload_form"  action="{{url_for("upload_sale")}}" method='POST'>
             <div id="sale" class='upload_title'>Upload a Sale Here</div>
-            <input type="text" class="form" placeholder="File Name" name="file">
+            <input type="text" class="form top" placeholder="File Name" name="file">
             <input type="text" class="form" placeholder="Sale Location" name="location">
             <input type="text" class="form" placeholder="Date mm/dd/yyyy" name="date"><br>
             <input type="submit" class="sale submit" value="Submit">

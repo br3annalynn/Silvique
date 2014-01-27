@@ -140,6 +140,47 @@ def print_view():
         total += row[3]
     return render_template('print_view.html', inventory_list=inventory_list, total=total, current_date=current_date)
 
+@app.route("/save_inventory")
+def save_inv():
+    session_user_id = session.get('session_user_id')
+    if session_user_id:
+        return render_template('save_inventory.html')
+    return redirect(url_for('index'))
+
+@app.route("/save_inventory", methods=['POST'])
+def save_inventory():
+    current_date = datetime.date.today().strftime("%m/%d/%y")
+    global XLS_FOLDER
+    book = Workbook()
+    sheet1 = book.add_sheet('inventory')
+    file_name = request.form.get('file')
+    inventory_list = model2.show_inventory()
+    sheet1.write(0, 0, "Inventory " + current_date) 
+    sheet1.write(1, 0, "Tag Total")
+    sheet1.write(2, 0, "1/2 Tag Total")
+    sheet1.write(4, 0, "Sku")
+    sheet1.write(4, 1, "#")
+    sheet1.write(4, 2, "Tag")
+    sheet1.write(4, 3, "Total")
+
+    total = 0
+    single_row = 0
+    while single_row < len(inventory_list):
+        print_row = sheet1.row(single_row + 5)
+        for i in range(0, 3):
+            print_row.write(i, inventory_list[single_row][i])
+        print_row.write(3, inventory_list[single_row][1] * inventory_list[single_row][2])
+        total += inventory_list[single_row][1] * inventory_list[single_row][2]
+        single_row +=1
+
+    sheet1.write(1, 1, total)
+    sheet1.write(2, 1, total / 2)
+    book.save(XLS_FOLDER + file_name)
+
+    flash("Successfully saved " + file_name)
+    return redirect(url_for('save_inv'))
+
+
 @app.route("/upload_sale")
 def upload_sale():
     session_user_id = session.get('session_user_id')
@@ -171,41 +212,6 @@ def upload_sales_report():
     return redirect(url_for('display_inventory'))
     
 
-# @app.route("/save_inventory")
-# def save_inv():
-#     return render_template('save_inventory.html')
-
-# @app.route("/save_inventory", methods=['POST'])
-# def save_inventory():
-#     current_date = datetime.date.today().strftime("%m/%d/%y")
-#     global XLS_FOLDER
-#     book = Workbook()
-#     sheet1 = book.add_sheet('inventory')
-#     file_name = request.form.get('file')
-#     inventory_list = model.show_inventory()
-#     sheet1.write(0, 0, "Inventory " + current_date) 
-#     sheet1.write(1, 0, "Tag Total")
-#     sheet1.write(2, 0, "1/2 Tag Total")
-#     sheet1.write(4, 0, "Sku")
-#     sheet1.write(4, 1, "#")
-#     sheet1.write(4, 2, "Tag")
-#     sheet1.write(4, 3, "Total")
-
-#     total = 0
-#     single_row = 0
-#     while single_row < len(inventory_list):
-#         print_row = sheet1.row(single_row + 5)
-#         for i in range(0, 4):
-#             print_row.write(i, inventory_list[single_row][i])
-#         total += inventory_list[single_row][3]
-#         single_row +=1
-
-#     sheet1.write(1, 1, total)
-#     sheet1.write(2, 1, total / 2)
-#     book.save(XLS_FOLDER + file_name)
-
-#     flash("Successfully saved " + file_name)
-#     return redirect(url_for('save_inv'))
 
 
 # @app.route("/delete_inv")

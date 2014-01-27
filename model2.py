@@ -38,7 +38,7 @@ class Item(Base):
     sku = Column(String, nullable=False)
     amount = Column(Integer, nullable=False)
     tag = Column(Integer, nullable=False)
-    total = Column(Integer, nullable=False)
+    total = Column(Integer, nullable=True)
     sale_id = Column(Integer, ForeignKey('sales.id'), nullable=False)
     packing_list_id = Column(Integer, ForeignKey('packing_lists.id'), nullable=False)
 
@@ -64,7 +64,7 @@ def add_sale(location, date):
     return sale.id
 
 def add_item(pl_id, sale_id, bar_code, value, amount):
-    item = Item(sku=bar_code, amount=amount, tag=value, total=value * amount, sale_id=sale_id, packing_list_id=pl_id)
+    item = Item(sku=bar_code, amount=amount, tag=value, sale_id=sale_id, packing_list_id=pl_id)
     session.add(item)
     session.commit()
 

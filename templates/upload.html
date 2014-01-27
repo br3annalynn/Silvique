@@ -7,10 +7,10 @@
         <div class="nav_bar">
             <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
-            <div class="selected buttons">Upload Inventory</div>
-            <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
-            <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
+<!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
+ -->        <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
+            <div class="selected buttons">Upload Packing List</div>
             <div class="buttons"><a href="/add_skus">Add Sku's</a></div>
         </div>
         {% for message in get_flashed_messages() %}
@@ -18,7 +18,7 @@
         {% endfor %}
         <form class="upload_form"  action="{{url_for("upload_inventory")}}" method='POST'>
             <div class='upload_title'>Upload a Packing List Here</div>
-            <input type="text" class="form" placeholder="File Name" name="file">
+            <input type="text" class="form top" placeholder="File Name" name="file">
             <input type="text" class="form" placeholder="Packing List Name" name="name">
             <input type="text" class="form" placeholder="Date mm/dd/yyyy" name="date"><br>
             <input type="submit" class="submit" value="Submit">
