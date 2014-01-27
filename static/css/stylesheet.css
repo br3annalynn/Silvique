@@ -56,7 +56,7 @@ a:hover{
     width: 60%;
     background-color: black;
     margin: auto;
-    margin-top: 150px;
+    margin-top: 100px;
     padding: 100px;
     border-radius:25px;
     border: 1px solid silver;
@@ -74,6 +74,7 @@ a:hover{
 #name{
     font-size: 40px;
     color: 197739;
+    margin-bottom: 30px;
 }
 
 /*show_inventory*/
@@ -206,7 +207,7 @@ th{
 }
 .form{
     padding: 15px;
-    margin: 100px 120px 0px 180px;
+    margin: 20px 120px 0px 180px;
     font-size: 20px;
     text-align: center;
     width: 50%;
@@ -229,6 +230,9 @@ th{
     margin-top: 100px;
     height: 34px;
 }
+.form.center{
+    margin: 0px;
+}
 .submit{
     margin: 5px 120px 50px 180px;
     font-size: 15px;
@@ -236,6 +240,9 @@ th{
     width: 50%;
     height: 30px;
     background-color: 197739;
+}
+.submit.center{
+    margin: 0px;
 }
 .sale.submit{
     background-color: black;

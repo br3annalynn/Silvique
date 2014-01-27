@@ -16,6 +16,14 @@
             <div id="center_bar">
             <div class="center" id="main_title">Silvique Sterling Silver</div>
             <div class="center" id="name">Lynn Dulmage</div>
+            {% for message in get_flashed_messages() %}
+                <p class="message">{{message}}</p>
+            {% endfor %}
+            <form class="center"  action="{{url_for("login")}}" method='POST'>
+                <input type="text" class="form center" placeholder="Name" name="name">
+                <input type="text" class="form center" placeholder="Password" name="password"></br>
+                <input type="submit" class="submit center" value="Submit">
+            </form>
         </div>
     </body>
 </html>
