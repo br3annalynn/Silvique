@@ -64,14 +64,38 @@ def add_sale(location, date):
     return sale.id
 
 def add_item(pl_id, sale_id, bar_code, value, amount):
-    item = Item(sku=bar_code, amount=amount, tag=value, sale_id=sale_id, packing_list_id=pl_id)
+    item = Item(sku=bar_code, amount=amount, tag=value, sale_id=sale_id, total=amount * value, packing_list_id=pl_id)
     session.add(item)
     session.commit()
 
 def show_inventory():
-    rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Item.total).group_by(Item.sku).all()
-    print "###########rows: ", rows
+    rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).all()
+    # print "###########rows: ", rows
     return rows
+
+def get_packing_lists():
+    rows = session.query(Packing_list).order_by(Packing_list.date).all()
+    return rows
+
+def get_packing_list_by_id(list_id):
+    rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).filter(Item.packing_list_id==list_id).all()
+    return rows
+
+def get_packing_list_name_by_id(list_id):
+    name = session.query(Packing_list.name).filter(Packing_list.id==list_id).one()
+    return name
+
+def get_sales_lists():
+    rows = session.query(Sale).order_by(Sale.date).all()
+    return rows
+
+def get_sale_by_id(list_id):
+    rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).filter(Item.sale_id==list_id).all()
+    return rows
+
+def get_sale_name_by_id(list_id):
+    name = session.query(Sale.location).filter(Sale.id==list_id).one()
+    return name
 
 
 def main():

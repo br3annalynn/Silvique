@@ -31,27 +31,35 @@ def login():
 
 @app.route("/show")
 def display_inventory():
+    packing_lists = model2.get_packing_lists()
+    sales_lists = model2.get_sales_lists()
     inventory_list = model2.show_inventory()
     total = 0
     for row in inventory_list:
         total += row[2] * row[1]
-    return render_template('show_inventory.html', inventory_list=inventory_list, total=total)
+    return render_template('show_inventory.html', inventory_list=inventory_list, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing="Current Inventory")
 
-# @app.route("/get_lists")
-# def get_lists():
-#     inventory_list = []
-#     sales_list = []
-#     rows = model.list_tables()
-#     for row in rows:
-#         first_letter = row[0][0]
-#         if first_letter == "i" or first_letter == "I":
-#             # skip the main inventory table
-#             if row[0] != "inventory":
-#                 inventory_list.append(row[0])
-#         elif first_letter == "s" or first_letter == "S":
-#             sales_list.append(row[0])
-#     return json.dumps({'inventory_list' : inventory_list, 'sales_list': sales_list})
+@app.route("/show_packing_list/<list_id>")
+def show_packing_list(list_id):
+    packing_list = model2.get_packing_list_by_id(list_id)
+    name = model2.get_packing_list_name_by_id(list_id)[0]
+    packing_lists = model2.get_packing_lists()
+    sales_lists = model2.get_sales_lists()
+    total = 0
+    for row in packing_list:
+        total += row[2] * row[1]
+    return render_template('show_inventory.html', inventory_list=packing_list, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing=name)
 
+@app.route("/show_sale/<list_id>")
+def show_sale(list_id):
+    sale_list = model2.get_sale_by_id(list_id)
+    name = model2.get_sale_name_by_id(list_id)[0]
+    packing_lists = model2.get_packing_lists()
+    sales_lists = model2.get_sales_lists()
+    total = 0
+    for row in sale_list:
+        total += row[2] * row[1]
+    return render_template('show_inventory.html', inventory_list=sale_list, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing=name)
 
 @app.route("/upload_inv")
 def upload_inv():

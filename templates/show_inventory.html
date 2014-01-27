@@ -6,7 +6,7 @@
     <body class="background_show"=>
         <div class="nav_bar_silver">
             <div class="silvique buttons"><a class="silvique_inside" href="/">Silvique</a></div>
-            <div class="selected buttons">View Inventory</div>
+            <div class="selected buttons"><a href="/show">View Inventory</a></div>
 <!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
  -->        <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
@@ -16,7 +16,17 @@
         </div>
         <div id="left_box">
             <div id="inventory" class="left_titles">Packing Lists</div>
+            {% if packing_lists %}
+                {% for row in packing_lists %}
+                    <p class='lists'><a href="/show_packing_list/{{row.id}}">{{row.name}} {{row.date.strftime("%m/%d/%Y")}} </a></p>
+                {% endfor %}
+            {% endif %}
             <div id="sales" class="left_titles">Sales</div>
+            {% if sales_lists %}
+                {% for row in sales_lists %}
+                    <p class='lists'><a href="/show_sale/{{row.id}}"> {{row.location}} {{row.date.strftime("%m/%d/%Y")}} </a></p>
+                {% endfor %}
+            {% endif %}
             <div class="left_titles">Filter by Sku</div>
         </div>
         <div id="message_box">
@@ -29,9 +39,9 @@
         </div>
         <div class="main_body">
             <div class="boxes" class="right_box">
-                <h1 class='title boxes'>Current Inventory</h1>
+                <h1 class='title boxes'>{{name_of_showing}}</h1>
                 <div class='boxes'>
-                    <div class='total' id='tag'>Inventory Tag Total   ${{total}}</div>
+                    <div class='total' id='tag'>Tag Total   ${{total}}</div>
                     <!-- <div class='total' id='total'></div> -->
                 </div>
                 <div id="table_div" class='boxes'>
@@ -70,7 +80,7 @@
                 </div>
             </div>
         </div>
-    <script src="../static/js/jquery-2.0.3.js"></script>
-    <script src="../static/js/showFiles.js"></script>
+<!--     // <script src="../static/js/jquery-2.0.3.js"></script>
+    // <script src="../static/js/showFiles.js"></script> -->
     </body>
 </html>
