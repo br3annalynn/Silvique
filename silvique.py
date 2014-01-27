@@ -34,7 +34,7 @@ def display_inventory():
     inventory_list = model2.show_inventory()
     total = 0
     for row in inventory_list:
-        total += row[3]
+        total += row[2] * row[1]
     return render_template('show_inventory.html', inventory_list=inventory_list, total=total)
 
 # @app.route("/get_lists")
@@ -73,17 +73,15 @@ def upload_inventory():
     print "******************Trying to open ", file_name
     try:
         book = open_workbook(XLS_FOLDER + file_name)
-        sheet = book.sheet_by_index(0)
-        sale_id = 0
-        pl_id = model2.add_packing_list(name, date)
-        print "This is the pl_id: ", pl_id
-        read_bar_codes(pl_id, sale_id, sheet)
-        return redirect(url_for('display_inventory'))
     except IOError:
         flash("File not found. Check file name. ")
         print "No file found with the name ", file_name
         return redirect(url_for('upload_inventory'))
-    
+    sheet = book.sheet_by_index(0)
+    sale_id = 0
+    pl_id = model2.add_packing_list(name, date)
+    read_bar_codes(pl_id, sale_id, sheet)
+    return redirect(url_for('display_inventory'))
 
 def read_bar_codes(pl_id, sale_id, sheet):
     if sale_id:
@@ -142,6 +140,74 @@ def print_view():
         total += row[3]
     return render_template('print_view.html', inventory_list=inventory_list, total=total, current_date=current_date)
 
+@app.route("/upload_sale")
+def upload_sale():
+    session_user_id = session.get('session_user_id')
+    if session_user_id:
+        return render_template('upload_sale.html')
+    return redirect(url_for('index'))
+
+@app.route("/upload_sale", methods=["POST"])
+def upload_sales_report():
+    global XLS_FOLDER
+    file_name = request.form.get('file')
+    location = request.form.get('location')
+    try:
+        date = datetime.datetime.strptime(request.form.get('date'), '%m/%d/%Y')
+    except ValueError:
+        flash("Enter four digit year")
+        return redirect(url_for('upload_sale'))
+    print "******************Trying to open ", file_name
+    try:
+        book = open_workbook(XLS_FOLDER + file_name)
+    except IOError:
+        flash("File not found. Check file name. ")
+        print "No file found with the name ", file_name
+        return redirect(url_for('upload_sale'))
+    sheet = book.sheet_by_index(0)
+    sale_id = model2.add_sale(location, date)
+    pl_id = 0
+    read_bar_codes(pl_id, sale_id, sheet)
+    return redirect(url_for('display_inventory'))
+    
+
+# @app.route("/save_inventory")
+# def save_inv():
+#     return render_template('save_inventory.html')
+
+# @app.route("/save_inventory", methods=['POST'])
+# def save_inventory():
+#     current_date = datetime.date.today().strftime("%m/%d/%y")
+#     global XLS_FOLDER
+#     book = Workbook()
+#     sheet1 = book.add_sheet('inventory')
+#     file_name = request.form.get('file')
+#     inventory_list = model.show_inventory()
+#     sheet1.write(0, 0, "Inventory " + current_date) 
+#     sheet1.write(1, 0, "Tag Total")
+#     sheet1.write(2, 0, "1/2 Tag Total")
+#     sheet1.write(4, 0, "Sku")
+#     sheet1.write(4, 1, "#")
+#     sheet1.write(4, 2, "Tag")
+#     sheet1.write(4, 3, "Total")
+
+#     total = 0
+#     single_row = 0
+#     while single_row < len(inventory_list):
+#         print_row = sheet1.row(single_row + 5)
+#         for i in range(0, 4):
+#             print_row.write(i, inventory_list[single_row][i])
+#         total += inventory_list[single_row][3]
+#         single_row +=1
+
+#     sheet1.write(1, 1, total)
+#     sheet1.write(2, 1, total / 2)
+#     book.save(XLS_FOLDER + file_name)
+
+#     flash("Successfully saved " + file_name)
+#     return redirect(url_for('save_inv'))
+
+
 # @app.route("/delete_inv")
 # def delete_inventory():
 #     model.clear("I")
@@ -182,62 +248,7 @@ def print_view():
 #     return redirect(url_for('display_comparison'))
 
 
-@app.route("/upload_sale")
-def upload_sale():
-    return render_template('upload_sale.html')
 
-@app.route("/upload_sale", methods=["POST"])
-def upload_sales_report():
-    global XLS_FOLDER
-    file_name = request.form.get('file')
-    print "******************Trying to open ", file_name
-    try:
-        book = open_workbook(XLS_FOLDER + file_name)
-        sheet = book.sheet_by_index(0)
-        # I for inventory, C for comparison, S for sale
-        file_type = 'S'
-        read_bar_codes(file_name, file_type, sheet)
-        return redirect(url_for('display_inventory'))
-    except IOError:
-        flash("File not found. Check file name. ")
-        print "No file found with the name ", file_name
-        return redirect(url_for('upload_sale'))
-
-# @app.route("/save_inventory")
-# def save_inv():
-#     return render_template('save_inventory.html')
-
-# @app.route("/save_inventory", methods=['POST'])
-# def save_inventory():
-#     current_date = datetime.date.today().strftime("%m/%d/%y")
-#     global XLS_FOLDER
-#     book = Workbook()
-#     sheet1 = book.add_sheet('inventory')
-#     file_name = request.form.get('file')
-#     inventory_list = model.show_inventory()
-#     sheet1.write(0, 0, "Inventory " + current_date) 
-#     sheet1.write(1, 0, "Tag Total")
-#     sheet1.write(2, 0, "1/2 Tag Total")
-#     sheet1.write(4, 0, "Sku")
-#     sheet1.write(4, 1, "#")
-#     sheet1.write(4, 2, "Tag")
-#     sheet1.write(4, 3, "Total")
-
-#     total = 0
-#     single_row = 0
-#     while single_row < len(inventory_list):
-#         print_row = sheet1.row(single_row + 5)
-#         for i in range(0, 4):
-#             print_row.write(i, inventory_list[single_row][i])
-#         total += inventory_list[single_row][3]
-#         single_row +=1
-
-#     sheet1.write(1, 1, total)
-#     sheet1.write(2, 1, total / 2)
-#     book.save(XLS_FOLDER + file_name)
-
-#     flash("Successfully saved " + file_name)
-#     return redirect(url_for('save_inv'))
 
 # @app.route("/add_skus")
 # def add_skus():

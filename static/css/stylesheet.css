@@ -283,6 +283,9 @@ th{
     width: 100%;
     text-align: center;
 }
+.message.dark{
+    color: white;
+}
 #compare.message{
     color: silver;
 }
