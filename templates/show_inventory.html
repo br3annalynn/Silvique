@@ -6,7 +6,7 @@
     <body class="background_show"=>
         <div class="nav_bar_silver">
             <div class="silvique buttons"><a class="silvique_inside" href="/">Silvique</a></div>
-            <div class="selected buttons"><a href="/show">View Inventory</a></div>
+            <div><a href="/show" class="buttons selected">View Inventory</a></div>
 <!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
  -->        <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
@@ -28,6 +28,10 @@
                 {% endfor %}
             {% endif %}
             <div class="left_titles">Filter by Sku</div>
+            <form class="sku_search"  action="{{url_for("view_sku")}}" method='POST'>
+                <input type="text" class="form sku" placeholder="sku" name="sku"><br>
+                <input type="submit" class="submit sku" value="Submit">
+            </form>
         </div>
         <div id="message_box">
             {% if get_flashed_messages() %}
@@ -50,6 +54,9 @@
                         </thead>
                         <tbody>
                             <tr>
+                                {% if inventory_list[0][3] %}
+                                    <td class='header'><strong>Name</strong></td>
+                                {% endif %}
                                 <td class='header'><strong>Sku</strong></td>
                                 <td class='header' style="width:40px"><strong>#</strong></td>
                                 <td class='header'><strong>Item Value</strong></td>
@@ -60,6 +67,9 @@
                                 {% for row in inventory_list %}
                                     {% if loop.index %2 == 0 %}
                                         <tr class="first">
+                                            {% if row[3] %}
+                                                <td>{{row[3]}}</td>
+                                            {% endif %}
                                             <td>{{row[0]}}</td>
                                             <td>{{row[1]}}</td>
                                             <td>${{row[2]}}</td>
@@ -67,6 +77,9 @@
                                         <tr>
                                     {% else %}
                                         <tr class="second">
+                                            {% if row[3] %}
+                                                <td>{{row[3]}}</td>
+                                            {% endif %}
                                             <td>{{row[0]}}</td>
                                             <td>{{row[1]}}</td>
                                             <td>${{row[2]}}</td>

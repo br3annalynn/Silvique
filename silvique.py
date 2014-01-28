@@ -61,6 +61,15 @@ def show_sale(list_id):
         total += row[2] * row[1]
     return render_template('show_inventory.html', inventory_list=sale_list, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing=name)
 
+@app.route("/sku_search", methods=["POST"])
+def view_sku():
+    sku = request.form.get('sku')
+    rows = model2.search_by_sku(sku)
+    packing_lists = model2.get_packing_lists()
+    sales_lists = model2.get_sales_lists()
+    total = 0
+    return render_template('show_inventory.html', inventory_list=rows, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing=sku)
+
 @app.route("/upload_inv")
 def upload_inv():
     session_user_id = session.get('session_user_id')

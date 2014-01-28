@@ -97,6 +97,12 @@ def get_sale_name_by_id(list_id):
     name = session.query(Sale.location).filter(Sale.id==list_id).one()
     return name
 
+def search_by_sku(sku):
+    sales_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Sale.location).group_by(Sale.location).filter(Item.sale_id==Sale.id).filter(Item.sku==sku).all()
+    packing_list_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Packing_list.name).group_by(Packing_list.name).filter(Item.packing_list_id==Packing_list.id).filter(Item.sku==sku).all()
+    rows = packing_list_rows + sales_rows
+    print rows
+    return rows
 
 def main():
     pass

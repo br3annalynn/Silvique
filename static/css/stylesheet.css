@@ -216,6 +216,10 @@ th{
 .form.top{
     margin-top: 70px;
 }
+.form.sku{
+    margin: 10px 0px 5px 20px;
+    width: 150px;
+}
 .small_form_input{
     padding: 15px;
     font-size: 20px;
@@ -246,6 +250,10 @@ th{
 }
 .submit.center{
     margin: 0px;
+}
+.submit.sku{
+    margin: 0px 0px 0px 20px;
+    width: 150px;
 }
 .sale.submit{
     background-color: black;
