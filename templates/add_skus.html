@@ -22,7 +22,7 @@
                 <div id="select-buttons">
                     <input type="radio" name="list_type" id="add-packing-input" value="packing_list" onclick="showFiles();">Add to Packing List
                     <select disabled="disabled" id="add-packing-select" name="add-packing-select">
-                        <option value="0" disabled="disabled" selected="selected">Packing Lists</option>
+                        <option value="0" disabled="disabled" selected="selected">Choose a packing list</option>
                         {% if packing_lists %}
                             {% for row in packing_lists %}
                                 <option value="{{row.id}}">{{row.name}} {{row.date.strftime("%m/%d/%Y")}}</option>
@@ -31,7 +31,7 @@
                     </select><br/>
                     <input type="radio" name="list_type" id="add-sales-input" value="sale" onclick="showFiles();">Add to Sale
                     <select disabled="disabled" id="add-sales-select" name="add-sales-select">
-                        <option value="0" disabled="disabled" selected="selected">Sales</option>
+                        <option value="0" disabled="disabled" selected="selected">Choose a sale</option>
                         {% if sales_lists %}
                             {% for row in sales_lists %}
                                 <option value="{{row.id}}">{{row.location}} {{row.date.strftime("%m/%d/%Y")}}</option>
@@ -40,11 +40,12 @@
                     </select>
                 </div>
                 <div class="form_box" id="add-sku-form-box">
-                    <input type="text" class="small_form_input left" placeholder="Sku" name="sku">
-                    <input type="text" class="small_form_input" placeholder="Tag Price" name="value">
-                    <input type="text" class="small_form_input" placeholder="Amount" name="amount">
+                    <input type="text" class="small_form_input left" placeholder="Sku" name="sku" id="sku">
+                    <input type="text" class="small_form_input" placeholder="Tag Price" name="value" id="value">
+                    <input type="text" class="small_form_input" placeholder="Amount" name="amount" id="amount">
                 </div>
-                <input type="submit" class="small submit" name='btn' value="Add Sku">
+                <input type="submit" class="small submit" name='btn' value="Add Sku" id="add-sku">
+                <div id="invalid-message"></div>
             </form>
         </div>
     </body>

@@ -264,7 +264,7 @@ th{
     margin: 0px;
 }
 .submit{
-    margin: 5px 120px 50px 180px;
+    margin: 5px 120px 20px 180px;
     font-size: 15px;
     text-align: center;
     width: 50%;
@@ -394,6 +394,17 @@ th{
 
 #add-sku-form-box{
     margin-top: 70px;
+}
+
+.invalid{
+    border: 2px solid red;
+}
+
+#invalid-message{
+    color: silver;
+    width: 100%;
+    margin: auto;
+    text-align: center;
 }
 
 /*green: color: 197739*/

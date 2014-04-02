@@ -241,14 +241,21 @@ def add_skus():
 @app.route("/add_skus", methods=['POST'])
 def add_new_skus():
     list_type = request.form.get('list_type')
-    pl_id = request.form.get('add-packing-select')
-    sale_id = request.form.get('add-sales-select')
+    pl_id = check_if_none(request.form.get('add-packing-select'))
+    sale_id = check_if_none(request.form.get('add-sales-select'))
     bar_code = request.form.get('sku')
     value = int(request.form.get('value'))
     amount = get_amount(list_type, int(request.form.get('amount')))
-    model2.add_item(pl_id, sale_id, bar_code, value, amount)
+    print "#########", pl_id, sale_id, bar_code, value, amount
+    #model2.add_item(pl_id, sale_id, bar_code, value, amount)
     flash("Successfully added " + bar_code)
     return redirect(url_for('add_skus'))
+
+def check_if_none(list_id):
+    print "*************", list_id
+    if not list_id:
+        return 0
+    return list_id
 
 def get_amount(list_type, amount):
     if list_type == "sale":
