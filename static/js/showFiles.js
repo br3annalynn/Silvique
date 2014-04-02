@@ -1,36 +1,25 @@
-
+//<script src="../static/js/showFiles.js"></script>
 
 //////////////////
 
-$.get('/get_lists', results);
+var showFiles = function(){
+    var list_type = $('[name="list_type"]:checked').val();
 
-function results(result){
-    var lists = $.parseJSON(result);
-
-    salesList = lists['sales_list'];
-    inventoryList = lists['inventory_list'];
-    fillInFiles(salesList, inventoryList)
-    addClickEvents()
-
+    if (list_type == "packing_list") {
+        $("#add-packing-select").removeAttr("disabled");
+        $("#add-sales-select").attr("disabled", "disabled");
+    }
+    else if(list_type == "sale") {
+        $("#add-sales-select").removeAttr("disabled");
+        $("#add-packing-select").attr("disabled", "disabled");
+    }
+    
 }
 
-function fillInFiles(salesList, inventoryList){
-    for(var i = 0; i < inventoryList.length; i++){
-        $('#inventory').append('<p class="files" id="inv' + i + '">' + inventoryList[i] + '</p>');
-    } 
-    for(var i = 0; i < salesList.length; i++){
-        $('#sales').append('<p class="files" id="sale' + i + '">' + salesList[i] + '</p>');
-    }   
-}
 
-function addClickEvents(){
-    $('.files').click(function(){
-        var tableName = $(this).text();
-        console.log(tableName);
-        
-    })
 
-}
+
+
 
 
 

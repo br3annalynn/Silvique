@@ -13,7 +13,8 @@ XLS_FOLDER = 'xls/'
 
 @app.route("/")
 def index():
-    return render_template('main.html')
+    session_user_id = session.get('session_user_id')    
+    return render_template('main.html', session_user_id=session_user_id)
 
 @app.route("/", methods=['POST'])
 def login():
@@ -31,13 +32,16 @@ def login():
 
 @app.route("/show")
 def display_inventory():
-    packing_lists = model2.get_packing_lists()
-    sales_lists = model2.get_sales_lists()
-    inventory_list = model2.show_inventory()
-    total = 0
-    for row in inventory_list:
-        total += row[2] * row[1]
-    return render_template('show_inventory.html', inventory_list=inventory_list, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing="Current Inventory")
+    session_user_id = session.get('session_user_id')
+    if session_user_id:
+        packing_lists = model2.get_packing_lists()
+        sales_lists = model2.get_sales_lists()
+        inventory_list = model2.show_inventory()
+        total = 0
+        for row in inventory_list:
+            total += row[2] * row[1]
+        return render_template('show_inventory.html', inventory_list=inventory_list, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing="Current Inventory")
+    return redirect(url_for('index'))
 
 @app.route("/show_packing_list/<list_id>")
 def show_packing_list(list_id):
@@ -154,7 +158,7 @@ def print_view():
     inventory_list = model2.show_inventory()
     total = 0
     for row in inventory_list:
-        total += row[3]
+        total += row[2] * row[1]
     return render_template('print_view.html', inventory_list=inventory_list, total=total, current_date=current_date)
 
 @app.route("/save_inventory")
@@ -228,8 +232,49 @@ def upload_sales_report():
     read_bar_codes(pl_id, sale_id, sheet)
     return redirect(url_for('display_inventory'))
     
+@app.route("/add_skus")
+def add_skus():
+    packing_lists = model2.get_packing_lists()
+    sales_lists = model2.get_sales_lists()
+    return render_template('add_skus.html', packing_lists=packing_lists, sales_lists=sales_lists)
 
+@app.route("/add_skus", methods=['POST'])
+def add_new_skus():
+    list_type = request.form.get('list_type')
+    pl_id = request.form.get('add-packing-select')
+    sale_id = request.form.get('add-sales-select')
+    bar_code = request.form.get('sku')
+    value = int(request.form.get('value'))
+    amount = get_amount(list_type, int(request.form.get('amount')))
+    model2.add_item(pl_id, sale_id, bar_code, value, amount)
+    flash("Successfully added " + bar_code)
+    return redirect(url_for('add_skus'))
 
+def get_amount(list_type, amount):
+    if list_type == "sale":
+        amount *= -1
+    return amount
+
+def get_ids(selected_list):
+    selected_list_array = selected_list.split('-')
+    list_type = selected_list_array[0]
+    list_id = selected_list_array[1]
+    print '!!!!!!!!!', list_type
+    if list_type == "p":
+        pl_id = list_id
+        sale_id = 0
+    elif list_type == "s":
+        pl_id = 0
+        sale_id = list_id
+    else:
+        return (-1, -1)
+    return (pl_id, sale_id)
+
+@app.route("/get_lists")
+def get_lists():
+    sales_lists = model2.get_sales_lists();
+    packing_lists = model2.get_packing_lists();
+    return {'sales_lists': sales_lists, 'packing_lists' :packing_lists}
 
 # @app.route("/delete_inv")
 # def delete_inventory():
@@ -270,31 +315,6 @@ def upload_sales_report():
 #     model.clear('C')
 #     return redirect(url_for('display_comparison'))
 
-
-
-
-# @app.route("/add_skus")
-# def add_skus():
-#     return render_template('add_skus.html')
-
-# @app.route("/add_skus", methods=['POST'])
-# # ############### This needs help. Need to be able to specify which table the sku is being added to
-# def add_new_skus():
-#     if request.form['btn'] == 'Add to Inventory':
-#         bar_code = request.form.get('i_sku')
-#         value = int(request.form.get('i_value'))
-#         amount = int(request.form.get('i_amount'))
-#         # file_name = request.form.get('i_file_name')
-#     else:
-#         bar_code = request.form.get('s_sku')
-#         value = int(request.form.get('s_value'))
-#         amount = -1 * int(request.form.get('s_amount'))
-#         # file_name = request.form.get('s_file_name')
-#     file_type = "I"
-#     model.check_inventory(file_type, bar_code, value, amount)
-#     # model.add_to_table(file_type, file_name, bar_code, value, amount)
-#     flash("Successfully added " + bar_code)
-#     return redirect(url_for('add_skus'))
 
 
 @app.route("/clear")

@@ -70,39 +70,30 @@ def add_item(pl_id, sale_id, bar_code, value, amount):
 
 def show_inventory():
     rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).all()
-    # print "###########rows: ", rows
     return rows
 
 def get_packing_lists():
-    rows = session.query(Packing_list).order_by(Packing_list.date).all()
-    return rows
+    return session.query(Packing_list).order_by(Packing_list.date).all()
 
 def get_packing_list_by_id(list_id):
-    rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).filter(Item.packing_list_id==list_id).all()
-    return rows
+    return session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).filter(Item.packing_list_id==list_id).all()
 
 def get_packing_list_name_by_id(list_id):
-    name = session.query(Packing_list.name).filter(Packing_list.id==list_id).one()
-    return name
+    return session.query(Packing_list.name).filter(Packing_list.id==list_id).one()
 
 def get_sales_lists():
-    rows = session.query(Sale).order_by(Sale.date).all()
-    return rows
+    return session.query(Sale).order_by(Sale.date).all()
 
 def get_sale_by_id(list_id):
-    rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).filter(Item.sale_id==list_id).all()
-    return rows
+    return session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).filter(Item.sale_id==list_id).all()
 
 def get_sale_name_by_id(list_id):
-    name = session.query(Sale.location).filter(Sale.id==list_id).one()
-    return name
+    return session.query(Sale.location).filter(Sale.id==list_id).one()
 
 def search_by_sku(sku):
     sales_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Sale.location).group_by(Sale.location).filter(Item.sale_id==Sale.id).filter(Item.sku==sku).all()
     packing_list_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Packing_list.name).group_by(Packing_list.name).filter(Item.packing_list_id==Packing_list.id).filter(Item.sku==sku).all()
-    rows = packing_list_rows + sales_rows
-    print rows
-    return rows
+    return packing_list_rows + sales_rows
 
 def main():
     pass

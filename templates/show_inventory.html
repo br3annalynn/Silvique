@@ -3,7 +3,7 @@
         <title>View Inventory</title>
         <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
-    <body class="background_show"=>
+    <body class="background_show" id="background-show"=>
         <div class="nav_bar_silver">
             <div class="silvique buttons"><a class="silvique_inside" href="/">Silvique</a></div>
             <div><a href="/show" class="buttons selected">View Inventory</a></div>
@@ -33,14 +33,14 @@
                 <input type="submit" class="submit sku" value="Submit">
             </form>
         </div>
-        <div id="message_box">
-            {% if get_flashed_messages() %}
+        {% if get_flashed_messages() %}
+            <div id="message_box">
                 <p> Invalid Sku's found. Write down these numbers and choose <span id="add">Add Sku's</span> to re-enter: </p>
                 {% for message in get_flashed_messages() %}
                     <p> {{message}}</p>
                 {% endfor %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="main_body">
             <div class="boxes" class="right_box">
                 <h1 class='title boxes'>{{name_of_showing}}</h1>
@@ -54,8 +54,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                {% if inventory_list[0][3] %}
-                                    <td class='header'><strong>Name</strong></td>
+                                {% if inventory_list %}
+                                    {% if inventory_list[0][3] %}
+                                        <td class='header'><strong>Name</strong></td>
+                                    {% endif %}
                                 {% endif %}
                                 <td class='header'><strong>Sku</strong></td>
                                 <td class='header' style="width:40px"><strong>#</strong></td>

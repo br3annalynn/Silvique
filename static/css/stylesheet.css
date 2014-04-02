@@ -1,7 +1,7 @@
 /*main*/
 #background_main{
     margin: 0px;
-    background-image: url('http://www.silvique.comxa.com/web_images/silvique_promo_better_photos__no_name.jpg');
+    background-image: url('../images/background0.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-color: black;
@@ -79,19 +79,39 @@ a:hover{
 
 /*show_inventory*/
 
+
 .background_show{
     height: 100%;
     width: 100%;
     margin: 0px;
-    background-color: black;
     font-family: Verdana;
 }
+
+#background-show{
+    background-image: url('../images/background1.jpg');
+}
+
+#background-save{
+    background-image: url('../images/background2.jpg');
+}
+
+#background-upload-sale{
+    background-image: url('../images/background3.jpg');
+}
+
+#background-upload-pl{
+    background-image: url('../images/background4.jpg');
+}
+
+#background-add{
+    background-image: url('../images/background6.jpg');
+}
+
 .boxes.title{
-    color: gray;
+    color: black;
     padding-bottom: 0px;
     margin-bottom: 0px;
     margin-top: 10px;
-    background-color: black;
     font-weight: normal;
 }
 table{
@@ -136,17 +156,18 @@ th{
 #left_box{
     position: absolute;
     left:50px;
-    top: 180px;
+    top: 190px;
     width: 250px;
-    height: 100%;
+    height: auto;
     color: silver;
-/*    border-right: 1px solid silver;
-*/  padding-top: 50px;
-    padding-left: 20px;
+    margin-top: 50px;
+    padding-left: 10px;
+    border: 2px solid;
+    background-color: gray;
 }
 
 .left_titles{
-    color: gray;
+    color: black;
 /*    color: 7D1A5C;
 */    margin-top: 10px;
     font-size: 30px;
@@ -175,14 +196,16 @@ th{
     background-color: white;
 }
 .total{
-    color: gray;
+    color: black;
 }
 #message_box{
     position: absolute;
-    top: 183px;
+    top: 240px;
     right: 40px;
     color: silver;
     width: 300px;
+    border: 2px solid;
+    background-color: gray;
 }
 #add{
     color: 197739;
@@ -202,9 +225,9 @@ th{
 #compare.upload_form{
     background-color: silver;
 }
-#sale.upload_form{
+/*#sale.upload_form{
     background-color: 197739;
-}
+}*/
 .form{
     padding: 15px;
     margin: 5px 120px 0px 180px;
@@ -255,10 +278,10 @@ th{
     margin: 0px 0px 0px 20px;
     width: 150px;
 }
-.sale.submit{
+/*.sale.submit{
     background-color: black;
     color: silver;
-}
+}*/
 .small.submit{
     width: 77%;
     margin-left: 11.5%;
@@ -275,9 +298,9 @@ th{
 #compare.upload_title{
     color: black;
 }
-#sale.upload_title{
+/*#sale.upload_title{
     color: black;
-}
+}*/
 .no_compare{
     width: 400px;
     /*background-color: silver;*/
@@ -303,7 +326,7 @@ th{
     height: 100%;
     width: 100%;
     margin: 0px;
-    background-color: silver;
+    /*background-color: silver;*/
     font-family: Verdana;
 }
 /*print*/
@@ -354,6 +377,24 @@ th{
     padding-left: 20px;
 }
 
+/*add skud*/
+#inventory-options{
+    margin: 20px 0 0 260px;
+    width: 195px;
+    font-size: 14px;
+}
+
+#select-buttons{
+    color: silver;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#add-sku-form-box{
+    margin-top: 70px;
+}
 
 /*green: color: 197739*/
 /*yellow: color: A3A738;*/

@@ -3,44 +3,67 @@
         <title>Add Sku's</title>
         <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
-    <body class="background_upload">
+    <body class="background_upload" id="background-add">
         <div class="nav_bar">
             <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
-            <div class="buttons"><a href="/upload_inv">Upload Inventory</a></div>
-            <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
             <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
-            <div class="selected buttons">Add Sku's</div>
+            <div class="buttons"><a href="/upload_inv">Upload Packing List</a></div>
+<!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
+ -->        <div class="selected buttons">Add Sku's</div>
         </div>
         {% for message in get_flashed_messages() %}
             <p class="message">{{message}}</p>
         {% endfor %}
         <div id="both">
-            <form class="small_form"  action="{{url_for("add_new_skus")}}" method='POST'>
-                <div id='small_title'>Add to Inventory</div>
-<!--                 <select id="inv_select">
-                    <option value="Inventory1">Inventory 1</option>
-                    <option value="Inventory2">Inventory 2</option>                    
-                </select>
- -->                <div class="form_box">
-                    <input type="text" class="small_form_input left" placeholder="Sku" name="i_sku">
-                    <input type="text" class="small_form_input" placeholder="Tag Price" name="i_value">
-                    <input type="text" class="small_form_input" placeholder="Amount" name="i_amount">
-<!--                     <input type="text" class="small_form_input" placeholder="File Name" name="i_file_name">
- -->                </div>
-                <input type="submit" class="small submit" name='btn' value="Add to Inventory">
-            </form>
-            <form class="small_form two"  action="{{url_for("add_new_skus")}}" method='POST'>
-                <div id='small_title_two'>Add to Sale</div>
-                <div class="form_box">
-                    <input type="text" class="small_form_input left" placeholder="Sku" name="s_sku">
-                    <input type="text" class="small_form_input" placeholder="Tag Price" name="s_value">
-                    <input type="text" class="small_form_input" placeholder="Amount" name="s_amount">
-<!--                     <input type="text" class="small_form_input" placeholder="File Name" name="s_file_name">
- -->                </div>
-                <input type="submit" class="small submit" name='btn' value="Add to Sale">
+            <form class="upload_form"  action="{{url_for("add_new_skus")}}" method='POST'>
+                <div id="small_title">Add Sku's</div>
+                <div id="select-buttons">
+                    <input type="radio" name="list_type" id="add-packing-input" value="packing_list" onclick="showFiles();">Add to Packing List
+                    <select disabled="disabled" id="add-packing-select" name="add-packing-select">
+                        <option value="0" disabled="disabled" selected="selected">Packing Lists</option>
+                        {% if packing_lists %}
+                            {% for row in packing_lists %}
+                                <option value="{{row.id}}">{{row.name}} {{row.date.strftime("%m/%d/%Y")}}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select><br/>
+                    <input type="radio" name="list_type" id="add-sales-input" value="sale" onclick="showFiles();">Add to Sale
+                    <select disabled="disabled" id="add-sales-select" name="add-sales-select">
+                        <option value="0" disabled="disabled" selected="selected">Sales</option>
+                        {% if sales_lists %}
+                            {% for row in sales_lists %}
+                                <option value="{{row.id}}">{{row.location}} {{row.date.strftime("%m/%d/%Y")}}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form_box" id="add-sku-form-box">
+                    <input type="text" class="small_form_input left" placeholder="Sku" name="sku">
+                    <input type="text" class="small_form_input" placeholder="Tag Price" name="value">
+                    <input type="text" class="small_form_input" placeholder="Amount" name="amount">
+                </div>
+                <input type="submit" class="small submit" name='btn' value="Add Sku">
             </form>
         </div>
     </body>
+    <script src="../static/js/jquery-2.0.3.js"></script>
+    <script src="../static/js/showFiles.js"></script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
