@@ -18,10 +18,19 @@
         {% endfor %}
         <form id="sale" class="upload_form"  action="{{url_for("upload_sale")}}" method='POST'>
             <div id="sale" class='upload_title'>Upload a Sale Here</div>
-            <input type="text" class="form top" placeholder="File Name" name="file">
+            <div class="form top upload">
+                <input type="file" placeholder="File Name" name="file">
+            </div>
             <input type="text" class="form" placeholder="Sale Location" name="location">
-            <input type="text" class="form" placeholder="Date mm/dd/yyyy" name="date"><br>
+            <input type="text" class="form" placeholder="Date" name="date" id="date"><br>
             <input type="submit" class="sale submit" value="Submit">
         </form>
     </body>
+    <script src="../static/js/jquery-2.0.3.js"></script>
+    <script src="../static/js/jquery-ui-1.10.4.custom.min.js"></script>
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $("#date").datepicker();
+        });
+    </script>
 </html>

@@ -18,10 +18,15 @@
         {% endfor %}
         <form class="upload_form"  action="{{url_for("upload_inventory")}}" method='POST'>
             <div class='upload_title'>Upload a Packing List Here</div>
-            <input type="text" class="form top" placeholder="File Name" name="file">
+            <div class="form top upload">
+                <input type="file" placeholder="File Name" name="file">
+            </div>
             <input type="text" class="form" placeholder="Packing List Name" name="name">
             <input type="text" class="form" placeholder="Date mm/dd/yyyy" name="date"><br>
             <input type="submit" class="submit" value="Submit">
         </form>
     </body>
+    <script src="../static/js/jquery-2.0.3.js"></script>
+    <script src="../static/js/jquery-ui-1.10.4.custom.min.js"></script>
 </html>
+
