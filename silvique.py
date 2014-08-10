@@ -1,15 +1,14 @@
 from xlrd import open_workbook, cellname
-# import model
 import model2
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import datetime
 from xlwt import Workbook
 import json
+import config
 
 app = Flask(__name__)
 app.secret_key = "shhhhthisisasecret"
-
-XLS_FOLDER = 'xls/'
+app.config.from_object(config)
 
 @app.route("/")
 def index():
@@ -23,7 +22,9 @@ def login():
 
     user_id = model2.login(submitted_name, submitted_password)
     if user_id:
-        session['session_user_id'] = user_id 
+        session['session_user_id'] = user_id
+        folder = model2.get_folder(user_id) 
+        session['session_folder'] = folder
         print "Successfully loged in"
         return redirect(url_for("display_inventory"))
     else:
@@ -83,7 +84,6 @@ def upload_inv():
 
 @app.route("/upload_inv", methods=["POST"])
 def upload_inventory():
-    global XLS_FOLDER
     file_name = request.form.get('file')
     name = request.form.get('name')
     try:
@@ -93,7 +93,7 @@ def upload_inventory():
         return redirect(url_for('upload_inventory'))
     print "******************Trying to open ", file_name
     try:
-        book = open_workbook(XLS_FOLDER + file_name)
+        book = open_workbook(file_name)
     except IOError:
         flash("File not found. Check file name. ")
         print "No file found with the name ", file_name
@@ -103,6 +103,17 @@ def upload_inventory():
     pl_id = model2.add_packing_list(name, date)
     read_bar_codes(pl_id, sale_id, sheet)
     return redirect(url_for('display_inventory'))
+
+@app.route("/settings")
+def settings():
+    return render_template('settings.html')
+
+@app.route("/settings", methods=["POST"])
+def save_settings():
+    session_user_id = session.get('session_user_id')    
+    folder = request.form.get('folder')
+    success = model2.set_folder(folder, session_user_id)
+    return redirect('settings')
 
 def read_bar_codes(pl_id, sale_id, sheet):
     if sale_id:
@@ -171,10 +182,10 @@ def save_inv():
 @app.route("/save_inventory", methods=['POST'])
 def save_inventory():
     current_date = datetime.date.today().strftime("%m/%d/%y")
-    global XLS_FOLDER
     book = Workbook()
     sheet1 = book.add_sheet('inventory')
     file_name = request.form.get('file')
+    folder_name = session.get('session_folder')    
     inventory_list = model2.show_inventory()
     sheet1.write(0, 0, "Inventory " + current_date) 
     sheet1.write(1, 0, "Tag Total")
@@ -196,7 +207,7 @@ def save_inventory():
 
     sheet1.write(1, 1, total)
     sheet1.write(2, 1, total / 2)
-    book.save(XLS_FOLDER + file_name)
+    book.save(folder_name + file_name)
 
     flash("Successfully saved " + file_name)
     return redirect(url_for('save_inv'))
@@ -211,7 +222,6 @@ def upload_sale():
 
 @app.route("/upload_sale", methods=["POST"])
 def upload_sales_report():
-    global XLS_FOLDER
     file_name = request.form.get('file')
     location = request.form.get('location')
     try:
@@ -221,7 +231,7 @@ def upload_sales_report():
         return redirect(url_for('upload_sale'))
     print "******************Trying to open ", file_name
     try:
-        book = open_workbook(XLS_FOLDER + file_name)
+        book = open_workbook(file_name)
     except IOError:
         flash("File not found. Check file name. ")
         print "No file found with the name ", file_name
@@ -283,10 +293,10 @@ def get_lists():
     packing_lists = model2.get_packing_lists();
     return {'sales_lists': sales_lists, 'packing_lists' :packing_lists}
 
-# @app.route("/delete_inv")
-# def delete_inventory():
-#     model.clear("I")
-#     return redirect(url_for('display_inventory'))
+@app.route("/delete_inv")
+def delete_inventory():
+    model.clear("I")
+    return redirect(url_for('display_inventory'))
 
 
 # @app.route("/display_compare", methods=["POST"])

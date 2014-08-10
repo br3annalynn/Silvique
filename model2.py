@@ -1,9 +1,10 @@
+import config
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, func
 from sqlalchemy.orm import sessionmaker, relationship, backref, scoped_session
 
-engine = create_engine("sqlite:///inventory.db", echo=False)
+engine = create_engine(config.DB_URI, echo=False)
 session = scoped_session(sessionmaker(bind=engine, autocommit = False, autoflush = False))
 
 Base = declarative_base()
@@ -14,8 +15,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key = True)
-    name = Column(String)
-    password = Column(String)
+    name = Column(String(64))
+    password = Column(String(64))
+    folder = Column(String(100))
 
 class Sale(Base):
     __tablename__ = "sales"
@@ -35,7 +37,7 @@ class Item(Base):
     __tablename__ = "items"
 
     id = Column(Integer, primary_key = True, nullable=False)
-    sku = Column(String, nullable=False)
+    sku = Column(String(64), nullable=False)
     amount = Column(Integer, nullable=False)
     tag = Column(Integer, nullable=False)
     total = Column(Integer, nullable=True)
@@ -72,6 +74,16 @@ def show_inventory():
     rows = session.query(Item.sku, func.sum(Item.amount), Item.tag).group_by(Item.sku).all()
     return rows
 
+def set_folder(folder, session_user_id):
+    user = session.query(User).filter_by(id=session_user_id).one()
+    user.folder = folder
+    session.commit()
+    return True
+
+def get_folder(session_user_id):
+    user = session.query(User).filter_by(id=session_user_id).one()
+    return user.folder
+
 def get_packing_lists():
     return session.query(Packing_list).order_by(Packing_list.date).all()
 
@@ -95,8 +107,16 @@ def search_by_sku(sku):
     packing_list_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Packing_list.name).group_by(Packing_list.name).filter(Item.packing_list_id==Packing_list.id).filter(Item.sku==sku).all()
     return packing_list_rows + sales_rows
 
-def main():
-    pass
+def create_tables():
+    Base.metadata.create_all(engine)
+    session.commit()
+
+def connect():
+    engine = create_engine(config.DB_URI, echo=False) 
+    session = scoped_session(sessionmaker(bind=engine,
+                         autocommit = False,
+                         autoflush = False))
+    return session
 
 if __name__ == "__main__":
-    main()
+    create_tables()

@@ -6,39 +6,63 @@ $( document ).ready(function() {
     $("#add-sku").on('click', function(e){
         isValid = checkValidState();
         if (!isValid){
-            console.log("invalid");
-            $("#invalid-message").html("Form is not complete");
             e.preventDefault();
         }
     })
+    
+    $("#sku").change(function(){
+        $(this).removeClass("invalid");
+    });
+
+    $("#value").change(function(){
+        $(this).removeClass("invalid");
+    });
+
+    $("#amount").change(function(){
+        $(this).removeClass("invalid");
+    });
 });
 
 var checkValidState = function(){
-    var listType = $('[name="list_type"]:checked').val();
-
+    var listType = $('[name="list_type"]:checked')
     var plId = $('#add-packing-select').val();
     var saleId = $('#add-sales-select').val();
-    listSelected = islistSelected(plId, saleId);
-    if (!(listType && listSelected)){
+    var listSelected = islistSelected(plId, saleId);
+
+    if (!(listType.val() && listSelected)){
         $("#select-buttons").addClass("invalid");
     }
 
-    var sku = $('#sku').val();
-    if (!(sku)){
-        $('#sku').addClass("invalid");
-    }
-    var value = $('#value').val();
-        if (!(value)){
-        $('#value').addClass("invalid");
-    }
-    var amount = $('#amount').val();
-        if (!(amount)){
-        $('#amount').addClass("invalid");
+    var sku = $('#sku');
+    if(!sku.val()){
+        sku.addClass("invalid");
     }
 
-    if (!(listType && listSelected && sku && value && amount)){
-        return false
+    var value = $('#value');
+    if(!value.val() || !$.isNumeric(value.val())){
+        value.addClass("invalid");
     }
+
+    var amount = $('#amount');
+    if(!amount.val() || !$.isNumeric(amount.val())){
+        amount.addClass("invalid");
+    }
+
+    if ($("#select-buttons").hasClass('invalid') || 
+        sku.hasClass('invalid') || 
+        value.hasClass('invalid') || 
+        amount.hasClass('invalid') )
+        {
+            $("#invalid-message").show();
+            console.log("invalid");
+            return false;
+        }
+    else
+        {
+            $("#invalid-message").hide();
+            console.log("valid");
+            return true;
+        }
 };
 
 var islistSelected = function(plId, saleId){

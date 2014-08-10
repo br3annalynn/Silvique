@@ -2,6 +2,7 @@
     <head>
         <title>Upload Sale</title>
         <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
+        <link type="text/css" href="/static/css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
     </head>
     <body class="background_show" id="background-upload-sale">
         <div class="nav_bar_silver">
@@ -12,6 +13,7 @@
             <div class="selected buttons">Upload Sale</div>
             <div class="buttons"><a href="/upload_inv">Upload Packing List</a></div>
             <div class="buttons"><a href="/add_skus">Add Sku's</a></div>
+            <div class="buttons"><a href="/settings">Settings</a></div>
         </div>
         {% for message in get_flashed_messages() %}
             <p>{{message}}</p>
@@ -21,16 +23,16 @@
             <div class="form top upload">
                 <input type="file" placeholder="File Name" name="file">
             </div>
-            <input type="text" class="form" placeholder="Sale Location" name="location">
-            <input type="text" class="form" placeholder="Date" name="date" id="date"><br>
-            <input type="submit" class="sale submit" value="Submit">
+            <input type="text" class="form" placeholder="Sale Location" name="location"/>
+            <input type="text" class="form date" placeholder="Click to Select Date" name="date" id="date"/><br>
+            <input type="submit" class="sale submit" value="Submit"/>
         </form>
     </body>
     <script src="../static/js/jquery-2.0.3.js"></script>
     <script src="../static/js/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
-            $("#date").datepicker();
+            $(".date").datepicker();
         });
     </script>
 </html>

@@ -1,26 +1,25 @@
 <html>
     <head>
-        <title>Save Inventory</title>
+        <title>Settings</title>
         <link type="text/css" href="/static/css/stylesheet.css" rel="stylesheet">
     </head>
-    <body class="background_upload" id="background-save">
+    <body class="background_upload" id="background-settings">
         <div class="nav_bar">
             <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
 <!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
- -->        <div class="selected buttons">Save Inventory</div>
+ -->        <div class="buttons">Save Inventory</div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Packing List</a></div>
             <div class="buttons"><a href="/add_skus">Add Sku's</a></div>
-            <div class="buttons"><a href="/settings">Settings</a></div>
+            <div class="selected buttons"><a href="/settings">Settings</a></div>
         </div>
         {% for message in get_flashed_messages() %}
             <p class="message">{{message}}</p>
         {% endfor %}
-        <form id="sale" class="upload_form"  action="{{url_for("save_inventory")}}" method='POST'>
-            <div id="sale" class='upload_title'>Save File As</div>
-            <input type="text" class="form top" placeholder="File Name" name="file"><br>
-            <input type="submit" class="sale submit" value="Submit">
+        <form id="settings_form" class="upload_form"  action="{{url_for("settings")}}" method='POST'>
+            <input type="text" class="form top" placeholder="Save-to Folder" name="folder"><br>
+            <input type="submit" class="submit" value="Submit">
         </form>
     </body>
 </html> 
