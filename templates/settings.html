@@ -8,16 +8,18 @@
             <div class="silvique buttons"><a class="silvique_inside"href="/">Silvique</a></div>
             <div class="buttons"><a href="/show">View Inventory</a></div>
 <!--             <div class="buttons"><a href="/display_compare">Compare Inventory</a></div>
- -->        <div class="buttons">Save Inventory</div>
+ -->        <div class="buttons"><a href="/save_inventory">Save Inventory</a></div>
             <div class="buttons"><a href="/upload_sale">Upload Sale</a></div>
             <div class="buttons"><a href="/upload_inv">Upload Packing List</a></div>
             <div class="buttons"><a href="/add_skus">Add Sku's</a></div>
-            <div class="selected buttons"><a href="/settings">Settings</a></div>
+            <div class="selected buttons">Settings</div>
         </div>
-        {% for message in get_flashed_messages() %}
+        {% for message in get_flashed_messages() %} 
             <p class="message">{{message}}</p>
         {% endfor %}
+
         <form id="settings_form" class="upload_form"  action="{{url_for("settings")}}" method='POST'>
+            <h3 id="current-folder">Current Folder for saving: {{folder}}</h3>
             <input type="text" class="form top" placeholder="Save-to Folder" name="folder"><br>
             <input type="submit" class="submit" value="Submit">
         </form>

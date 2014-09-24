@@ -107,6 +107,10 @@ a:hover{
     background-image: url('../images/background6.jpg');
 }
 
+#background-settings{
+    background-image: url('../images/background7.jpg');
+}
+
 .boxes.title{
     color: black;
     padding-bottom: 0px;
@@ -414,6 +418,14 @@ th{
     margin: auto;
     text-align: center;
 }
+
+#current-folder{
+    color: white;
+    padding-top: 200px;
+    text-align: center;
+}
+
+
 
 /*green: color: 197739*/
 /*yellow: color: #EBEC2B;*/

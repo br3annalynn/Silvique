@@ -1,10 +1,13 @@
 from xlrd import open_workbook, cellname
 import model2
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, flash, Response
 import datetime
 from xlwt import Workbook
 import json
 import config
+import StringIO
+import mimetypes
+from werkzeug.datastructures import Headers
 
 app = Flask(__name__)
 app.secret_key = "shhhhthisisasecret"
@@ -18,7 +21,9 @@ def index():
 @app.route("/", methods=['POST'])
 def login():
     submitted_name = request.form.get('name')
+    print submitted_name
     submitted_password = request.form.get('password')
+    print submitted_password
 
     user_id = model2.login(submitted_name, submitted_password)
     if user_id:
@@ -69,10 +74,13 @@ def show_sale(list_id):
 @app.route("/sku_search", methods=["POST"])
 def view_sku():
     sku = request.form.get('sku')
+    print "********", sku
     rows = model2.search_by_sku(sku)
     packing_lists = model2.get_packing_lists()
     sales_lists = model2.get_sales_lists()
     total = 0
+    for row in rows:
+        total += row[2] * row[1]
     return render_template('show_inventory.html', inventory_list=rows, total=total, packing_lists=packing_lists, sales_lists=sales_lists, name_of_showing=sku)
 
 @app.route("/upload_inv")
@@ -103,17 +111,6 @@ def upload_inventory():
     pl_id = model2.add_packing_list(name, date)
     read_bar_codes(pl_id, sale_id, sheet)
     return redirect(url_for('display_inventory'))
-
-@app.route("/settings")
-def settings():
-    return render_template('settings.html')
-
-@app.route("/settings", methods=["POST"])
-def save_settings():
-    session_user_id = session.get('session_user_id')    
-    folder = request.form.get('folder')
-    success = model2.set_folder(folder, session_user_id)
-    return redirect('settings')
 
 def read_bar_codes(pl_id, sale_id, sheet):
     if sale_id:
@@ -185,7 +182,6 @@ def save_inventory():
     book = Workbook()
     sheet1 = book.add_sheet('inventory')
     file_name = request.form.get('file')
-    folder_name = session.get('session_folder')    
     inventory_list = model2.show_inventory()
     sheet1.write(0, 0, "Inventory " + current_date) 
     sheet1.write(1, 0, "Tag Total")
@@ -207,10 +203,34 @@ def save_inventory():
 
     sheet1.write(1, 1, total)
     sheet1.write(2, 1, total / 2)
-    book.save(folder_name + file_name)
 
-    flash("Successfully saved " + file_name)
-    return redirect(url_for('save_inv'))
+    response = Response()
+    response.status_code = 200
+    output = StringIO.StringIO()
+    book.save(output)
+    response.data = output.getvalue()
+    mimetype_tuple = mimetypes.guess_type(file_name)
+
+    response_headers = Headers({
+            'Pragma': "public",  # required,
+            'Expires': '0',
+            'Cache-Control': 'must-revalidate, post-check=0, pre-check=0',
+            'Cache-Control': 'private',  # required for certain browsers,
+            'Content-Type': mimetype_tuple[0],
+            'Content-Disposition': 'attachment; filename=\"%s\";' % file_name,
+            'Content-Transfer-Encoding': 'binary',
+            'Content-Length': len(response.data)
+        })
+ 
+    if not mimetype_tuple[1] is None:
+        response.update({
+                'Content-Encoding': mimetype_tuple[1]
+            })
+ 
+    response.headers = response_headers
+    #as per jquery.fileDownload.js requirements
+    response.set_cookie('fileDownload', 'true', path='/')
+    return response
 
 
 @app.route("/upload_sale")
@@ -257,7 +277,7 @@ def add_new_skus():
     value = int(request.form.get('value'))
     amount = get_amount(list_type, int(request.form.get('amount')))
     print "#########", pl_id, sale_id, bar_code, value, amount
-    #model2.add_item(pl_id, sale_id, bar_code, value, amount)
+    model2.add_item(pl_id, sale_id, bar_code, value, amount)
     flash("Successfully added " + bar_code)
     return redirect(url_for('add_skus'))
 
@@ -295,7 +315,7 @@ def get_lists():
 
 @app.route("/delete_inv")
 def delete_inventory():
-    model.clear("I")
+    model2.clear("I")
     return redirect(url_for('display_inventory'))
 
 

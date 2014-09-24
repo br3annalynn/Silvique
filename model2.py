@@ -103,9 +103,24 @@ def get_sale_name_by_id(list_id):
     return session.query(Sale.location).filter(Sale.id==list_id).one()
 
 def search_by_sku(sku):
+    print "^^^^^^^^", sku
     sales_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Sale.location).group_by(Sale.location).filter(Item.sale_id==Sale.id).filter(Item.sku==sku).all()
+    for row in sales_rows:
+        print "row: ", row
     packing_list_rows = session.query(Item.sku, func.sum(Item.amount), Item.tag, Packing_list.name).group_by(Packing_list.name).filter(Item.packing_list_id==Packing_list.id).filter(Item.sku==sku).all()
+    for row in packing_list_rows:
+        print "row: ", row
     return packing_list_rows + sales_rows
+
+def clear(file_type):
+    connect_to_db()
+    if file_type == "I":
+        query = """DELETE from inventory"""
+    else:
+        query = """DELETE from comparison"""
+    DB.execute(query, ())
+    CONN.commit()
+    print "All rows deleted"
 
 def create_tables():
     Base.metadata.create_all(engine)
