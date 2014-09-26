@@ -112,54 +112,6 @@ def upload_inventory():
     read_bar_codes(pl_id, sale_id, sheet)
     return redirect(url_for('display_inventory'))
 
-def read_bar_codes(pl_id, sale_id, sheet):
-    if sale_id:
-        start = 6
-    else:
-        start = 5
-    for row_index in range(start, sheet.nrows):
-        bar_code = sheet.cell(row_index,0).value
-        amount = find_amount(pl_id, sale_id, sheet, row_index)
-        # check that cell is not empty
-        if bar_code:
-            bar_code = bar_code.upper()
-            # check that sku is valid (ends in 3 numbers)
-            try:
-                # change last three elements of string to integer
-                value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
-            except TypeError:
-                flash(bar_code)
-                print "Not a valid sku. Skipping ", bar_code
-                continue
-            if not value:
-                flash(bar_code)
-                print "Not a valid sku. Skipping ", bar_code
-                continue
-            model2.add_item(pl_id, sale_id, bar_code, value, amount)
-            # model.check_inventory(file_type, bar_code, value, amount)
-        else:
-            continue
-
-def find_amount(pl_id, sale_id, sheet, row_index):
-    if sale_id:
-        amount = -1
-    else:
-        ################ check where this amount is. Add to template.
-        amount = sheet.cell(row_index, 2).value
-    # set default value of 1
-    if not amount:
-        amount = 1
-    return amount
-
-
-def convert_to_int(a, b, c):
-    #check if each is a number
-    if ord(a) < 48 or 57 < ord(a) or ord(b) < 48 or 57 < ord(b) or ord(c) < 48 or 57 < ord(c):
-        print ord(a), ord(b), ord(c)
-        return False
-    number = (ord(a) - 48) * 100 + (ord(b) - 48) * 10 + (ord(c) - 48)
-    return number
-
 @app.route("/print_view")
 def print_view():
     current_date = datetime.date.today().strftime("%m/%d/%y")
@@ -280,6 +232,54 @@ def add_new_skus():
     model2.add_item(pl_id, sale_id, bar_code, value, amount)
     flash("Successfully added " + bar_code)
     return redirect(url_for('add_skus'))
+
+def read_bar_codes(pl_id, sale_id, sheet):
+    if sale_id:
+        start = 6
+    else:
+        start = 5
+    for row_index in range(start, sheet.nrows):
+        bar_code = sheet.cell(row_index,0).value
+        amount = find_amount(pl_id, sale_id, sheet, row_index)
+        # check that cell is not empty
+        if bar_code:
+            bar_code = bar_code.upper()
+            # check that sku is valid (ends in 3 numbers)
+            try:
+                # change last three elements of string to integer
+                value = convert_to_int(sheet.cell(row_index,0).value[-3], sheet.cell(row_index,0).value[-2], sheet.cell(row_index,0).value[-1])
+            except TypeError:
+                flash(bar_code)
+                print "Not a valid sku. Skipping ", bar_code
+                continue
+            if not value:
+                flash(bar_code)
+                print "Not a valid sku. Skipping ", bar_code
+                continue
+            model2.add_item(pl_id, sale_id, bar_code, value, amount)
+            # model.check_inventory(file_type, bar_code, value, amount)
+        else:
+            continue
+
+def find_amount(pl_id, sale_id, sheet, row_index):
+    if sale_id:
+        amount = -1
+    else:
+        ################ check where this amount is. Add to template.
+        amount = sheet.cell(row_index, 2).value
+    # set default value of 1
+    if not amount:
+        amount = 1
+    return amount
+
+
+def convert_to_int(a, b, c):
+    #check if each is a number
+    if ord(a) < 48 or 57 < ord(a) or ord(b) < 48 or 57 < ord(b) or ord(c) < 48 or 57 < ord(c):
+        print ord(a), ord(b), ord(c)
+        return False
+    number = (ord(a) - 48) * 100 + (ord(b) - 48) * 10 + (ord(c) - 48)
+    return number
 
 def check_if_none(list_id):
     print "*************", list_id
