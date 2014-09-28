@@ -257,7 +257,6 @@ def read_bar_codes(pl_id, sale_id, sheet):
                 print "Not a valid sku. Skipping ", bar_code
                 continue
             model2.add_item(pl_id, sale_id, bar_code, value, amount)
-            # model.check_inventory(file_type, bar_code, value, amount)
         else:
             continue
 
